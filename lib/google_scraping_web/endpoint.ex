@@ -7,7 +7,7 @@ defmodule GoogleScrapingWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_google_scraping_key",
-    signing_salt: "CXX6TtKx"
+    signing_salt: "z0NG/70h"
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]

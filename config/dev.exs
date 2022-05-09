@@ -6,7 +6,6 @@ config :google_scraping, GoogleScraping.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "google_scraping_dev",
-  stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -23,7 +22,7 @@ config :google_scraping, GoogleScrapingWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "RDLusWvBbJlzt2Pbb19EZYevX/rL+0gXEOWxMgzzxIbUCAQghCCDNOp1mKoNCeAX",
+  secret_key_base: "RTNFXEPjzFKFc31iMrQeu/lMEn5RYyaMMTsid/M+08PJoTZ7cK4erN40UdjkH+Oh",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}

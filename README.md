@@ -1,4 +1,4 @@
-# Google Scraping
+# GoogleScraping
 
 To start your Phoenix server:
 

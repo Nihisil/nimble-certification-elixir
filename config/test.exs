@@ -17,7 +17,7 @@ config :google_scraping, GoogleScraping.Repo,
 # you can enable the server option below.
 config :google_scraping, GoogleScrapingWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "6XwRfoRyV9yHySpC/XrjYthrozAGDXKryzL/QZNbTu0BTJvxrR3qWxYe1mK6peAI",
+  secret_key_base: "6PUReG63ZBk9DNTxNWs8zJtbbku4LVtGl0xrdqqQuVFN+B7vAtx5Yxsng2wkQ5NR",
   server: false
 
 # In test we don't send emails.
