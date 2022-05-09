@@ -16,20 +16,27 @@ defmodule GoogleScraping.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
+      use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+
+      use Mimic
+
       alias GoogleScraping.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import GoogleScraping.DataCase
+      import GoogleScraping.Factory
     end
   end
 
   setup tags do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(GoogleScraping.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    pid = Sandbox.start_owner!(GoogleScraping.Repo, shared: not tags[:async])
+    on_exit(fn -> Sandbox.stop_owner(pid) end)
     :ok
   end
 

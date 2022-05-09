@@ -12,6 +12,7 @@ config :google_scraping,
 
 # Configures the endpoint
 config :google_scraping, GoogleScrapingWeb.Endpoint,
+  health_path: "/_health",
   url: [host: "localhost"],
   render_errors: [view: GoogleScrapingWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: GoogleScraping.PubSub,
@@ -28,6 +29,18 @@ config :google_scraping, GoogleScraping.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
+
+# Configure dart_sass (the version is required)
+config :dart_sass,
+  version: "1.51.0",
+  default: [
+    args: ~w(
+      --load-path=./node_modules
+      css/app.scss
+      ../priv/static/assets/app.css
+      ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
 
 # Configure esbuild (the version is required)
 config :esbuild,
@@ -46,6 +59,11 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :google_scraping, Oban,
+  repo: GoogleScraping.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

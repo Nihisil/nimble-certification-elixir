@@ -17,12 +17,19 @@ defmodule GoogleScrapingWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
+      use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+
+      use Mimic
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import GoogleScrapingWeb.ConnCase
+      import GoogleScraping.Factory
 
       alias GoogleScrapingWeb.Router.Helpers, as: Routes
 
@@ -32,8 +39,8 @@ defmodule GoogleScrapingWeb.ConnCase do
   end
 
   setup tags do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(GoogleScraping.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    pid = Sandbox.start_owner!(GoogleScraping.Repo, shared: not tags[:async])
+    on_exit(fn -> Sandbox.stop_owner(pid) end)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

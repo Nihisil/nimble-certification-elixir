@@ -15,7 +15,8 @@ defmodule GoogleScraping.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: GoogleScraping.PubSub},
       # Start the Endpoint (http/https)
-      GoogleScrapingWeb.Endpoint
+      GoogleScrapingWeb.Endpoint,
+      {Oban, oban_config()}
       # Start a worker by calling: GoogleScraping.Worker.start_link(arg)
       # {GoogleScraping.Worker, arg}
     ]
@@ -32,5 +33,10 @@ defmodule GoogleScraping.Application do
   def config_change(changed, _new, removed) do
     GoogleScrapingWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  # Conditionally disable crontab, queues, or plugins here.
+  defp oban_config do
+    Application.get_env(:google_scraping, Oban)
   end
 end

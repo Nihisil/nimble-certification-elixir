@@ -24,6 +24,11 @@ config :google_scraping, GoogleScrapingWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "RTNFXEPjzFKFc31iMrQeu/lMEn5RYyaMMTsid/M+08PJoTZ7cK4erN40UdjkH+Oh",
   watchers: [
+    sass: {
+      DartSass,
+      :install_and_run,
+      [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]
+    },
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
   ]
