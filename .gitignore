@@ -37,3 +37,6 @@ npm-debug.log
 
 # IDE files
 .idea
+
+# Mac OS X files
+.DS_Store

@@ -100,7 +100,8 @@ defmodule GoogleScraping.MixProject do
         "cmd npm run eslint.fix --prefix assets",
         "prettier.fix",
         "deps.clean --unlock --unused",
-        "format"
+        "format",
+        "gettext.extract-and-merge"
       ],
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", &migrate/1, "run priv/repo/seeds.exs"],

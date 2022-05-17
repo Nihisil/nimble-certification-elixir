@@ -1,3 +1,5 @@
+[![Tests](https://github.com/Nihisil/nimble-certification-elixir/actions/workflows/test.yml/badge.svg)](https://github.com/Nihisil/nimble-certification-elixir/actions/workflows/test.yml)
+
 ## Introduction
 
 This is web application for extracting large amounts of data from the Google search results page.
@@ -77,7 +79,7 @@ This is web application for extracting large amounts of data from the Google sea
 - Stop docker:
 
   ```sh
-  mix coverage 
+  docker-compose down 
   ```
   
 ### Production

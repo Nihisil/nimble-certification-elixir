@@ -32,7 +32,7 @@ config :swoosh, :api_client, false
 
 # Configure dart_sass (the version is required)
 config :dart_sass,
-  version: "1.51.0",
+  version: "1.49.11",
   default: [
     args: ~w(
       --load-path=./node_modules
