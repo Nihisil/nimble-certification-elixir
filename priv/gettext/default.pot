@@ -11,6 +11,11 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/page/index.html.heex:2
-msgid "Welcome to %{name}!"
+#: lib/google_scraping_web/templates/page/index.html.heex:4
+msgid "Google Scraping App"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/page/index.html.heex:7
+msgid "Using this application you can scrape google search results for a provided list of keywords."
 msgstr ""
