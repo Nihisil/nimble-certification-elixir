@@ -1,11 +1,11 @@
-name: Deploy to Heroku
+name: Deploy to Heroku production
 
 on:
   workflow_run:
     workflows:
       - Test
     branches:
-      - develop
+      - main
     types:
       - completed
   workflow_dispatch:
@@ -13,11 +13,11 @@ on:
 env:
   # To API Key is used by Heroku CLI to authenticate
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+  HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME_PRODUCTION }}
 
 jobs:
   deploy:
-    name: Deploy to Heroku
+    name: Deploy to Heroku production
     runs-on: ubuntu-latest
 
     steps:
