@@ -11,7 +11,10 @@
     <%= if @current_user do %>
       <a href="#" class="btn btn-primary btn-lg">Proceed to upload keywords</a>
     <% else %>
-      <%= link "Register to proceed", to: Routes.user_registration_path(@conn, :new), class: "btn btn-primary btn-lg" %>
+      <%= link("Register to proceed",
+        to: Routes.user_registration_path(@conn, :new),
+        class: "btn btn-primary btn-lg"
+      ) %>
     <% end %>
   </div>
 </div>
