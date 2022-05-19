@@ -31,8 +31,8 @@ defmodule GoogleScrapingWeb.UserRegistrationControllerTest do
       assert redirected_to(conn) == "/"
 
       # Now do a logged in request and assert on the menu
-      conn = get(conn, "/")
-      response = html_response(conn, 200)
+      new_conn = get(conn, "/")
+      response = html_response(new_conn, 200)
       assert response =~ email
       assert response =~ "Log out</a>"
     end

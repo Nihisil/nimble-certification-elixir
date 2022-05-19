@@ -1,9 +1,10 @@
 defmodule GoogleScrapingWeb.UserAuthTest do
   use GoogleScrapingWeb.ConnCase, async: true
 
+  import GoogleScraping.AccountsFixtures
+
   alias GoogleScraping.Accounts
   alias GoogleScrapingWeb.UserAuth
-  import GoogleScraping.AccountsFixtures
 
   @remember_me_cookie "_google_scraping_web_user_remember_me"
 
@@ -136,29 +137,29 @@ defmodule GoogleScrapingWeb.UserAuthTest do
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do
-      halted_conn =
+      base_halted_conn =
         %{conn | path_info: ["foo"], query_string: ""}
         |> fetch_flash()
         |> UserAuth.require_authenticated_user([])
 
-      assert halted_conn.halted
-      assert get_session(halted_conn, :user_return_to) == "/foo"
+      assert base_halted_conn.halted
+      assert get_session(base_halted_conn, :user_return_to) == "/foo"
 
-      halted_conn =
+      attrs_halted_conn =
         %{conn | path_info: ["foo"], query_string: "bar=baz"}
         |> fetch_flash()
         |> UserAuth.require_authenticated_user([])
 
-      assert halted_conn.halted
-      assert get_session(halted_conn, :user_return_to) == "/foo?bar=baz"
+      assert attrs_halted_conn.halted
+      assert get_session(attrs_halted_conn, :user_return_to) == "/foo?bar=baz"
 
-      halted_conn =
+      post_halted_conn =
         %{conn | path_info: ["foo"], query_string: "bar", method: "POST"}
         |> fetch_flash()
         |> UserAuth.require_authenticated_user([])
 
-      assert halted_conn.halted
-      refute get_session(halted_conn, :user_return_to)
+      assert post_halted_conn.halted
+      refute get_session(post_halted_conn, :user_return_to)
     end
 
     test "does not redirect if user is authenticated", %{conn: conn, user: user} do

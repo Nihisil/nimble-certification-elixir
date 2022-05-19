@@ -1,9 +1,10 @@
 defmodule GoogleScrapingWeb.UserResetPasswordControllerTest do
   use GoogleScrapingWeb.ConnCase, async: true
 
+  import GoogleScraping.AccountsFixtures
+
   alias GoogleScraping.Accounts
   alias GoogleScraping.Repo
-  import GoogleScraping.AccountsFixtures
 
   setup do
     %{user: user_fixture()}
