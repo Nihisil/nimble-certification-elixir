@@ -9,7 +9,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li>
-              <%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %>
+              <%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete, class: "nav-link" %>
             </li>
           </ul>
         </div>
