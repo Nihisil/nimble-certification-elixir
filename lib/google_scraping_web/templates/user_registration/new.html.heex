@@ -1,26 +1,33 @@
-<h1>Register</h1>
+<div class="d-flex justify-content-center">
+  <h2>Register</h2>
+</div>
+<div class="d-flex justify-content-center">
+  <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)} class={"col-lg-6"}>
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger">
+        <span>Oops, something went wrong! Please check the errors below.</span>
+      </div>
+    <% end %>
 
-<.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+    <div class="mb-3">
+      <%= label f, :email, class: "form-label" %>
+      <%= email_input f, :email, required: true, class: "form-control #{error_class(f, :email)}" %>
+      <%= error_tag f, :email %>
     </div>
-  <% end %>
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
+    <div class="mb-3">
+      <%= label f, :password, class: "form-label" %>
+      <%= password_input f, :password, required: true, class: "form-control #{error_class(f, :password)}" %>
+      <%= error_tag f, :password %>
+    </div>
 
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
-
-  <div>
-    <%= submit "Register" %>
-  </div>
-</.form>
-
-<p>
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>
+    <div class="mb-3 row">
+      <div class="col-6">
+        <%= link "Already had an account? Log in", to: Routes.user_session_path(@conn, :new) %>
+      </div>
+      <div class="col-6 text-end">
+        <%= submit "Create account", class: "btn btn-primary" %>
+      </div>
+    </div>
+  </.form>
+</div>
