@@ -1,0 +1,18 @@
+{
+  "skip_files": [
+    "lib/mix",
+    "lib/google_scraping/application.ex",
+    "lib/google_scraping/release_tasks.ex",
+    "lib/google_scraping_web.ex",
+    "lib/google_scraping_mail.ex",
+    "lib/google_scraping_web/endpoint.ex",
+    "lib/google_scraping_web/telemetry.ex",
+    "lib/google_scraping_web/channels/user_socket.ex",
+    "lib/google_scraping_web/views/error_helpers.ex",
+    "lib/google_scraping_web/controllers/api/fallback_controller.ex",
+    "test/support"
+  ],
+  "coverage_options": {
+    "minimum_coverage": 100
+  }
+}

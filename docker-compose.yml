@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  build:
+    build:
+      context: .
+      cache_from:
+        - google_scraping-build
+      target: build
+    image: google_scraping-build
+
+  app:
+    build:
+      context: .
+      cache_from:
+        - google_scraping-build
+        - google_scraping
+      target: app
+    image: google_scraping
