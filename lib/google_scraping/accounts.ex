@@ -6,7 +6,9 @@ defmodule GoogleScraping.Accounts do
   import Ecto.Query, warn: false
   alias GoogleScraping.Repo
 
-  alias GoogleScraping.Accounts.{User, UserToken, UserNotifier}
+  alias GoogleScraping.Accounts.User
+  alias GoogleScraping.Accounts.UserToken
+  alias GoogleScraping.Accounts.UserNotifier
 
   ## Database getters
 
