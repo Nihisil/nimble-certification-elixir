@@ -6,5 +6,10 @@
     <p class="col-md-8 fs-4">
       <%= gettext "Using this application you can scrape google search results for a provided list of keywords." %>
     </p>
+    <%= if @current_user do %>
+      <a href="#" class="btn btn-primary btn-lg">Proceed to upload keywords</a>
+    <% else %>
+      <%= link "Register to proceed", to: Routes.user_registration_path(@conn, :new), class: "btn btn-primary btn-lg" %>
+    <% end %>
   </div>
 </div>
