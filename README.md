@@ -4,6 +4,10 @@
 
 This is web application for extracting large amounts of data from the Google search results page.
 
+Deployed versions:
+- Staging: https://alex-elixir-ic-staging.herokuapp.com/
+- Production: https://alex-elixir-ic-production.herokuapp.com/
+
 ## Project Setup
 
 ### Erlang & Elixir
