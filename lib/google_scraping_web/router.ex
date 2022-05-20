@@ -84,5 +84,6 @@ defmodule GoogleScrapingWeb.Router do
     pipe_through [:browser]
 
     delete "/users/log_out", UserSessionController, :delete
+    resources "/keywords", KeywordController
   end
 end
