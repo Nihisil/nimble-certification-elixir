@@ -7,6 +7,7 @@ defmodule GoogleScraping.DashboardTest do
     alias GoogleScraping.Dashboard.Keyword
 
     import GoogleScraping.DashboardFixtures
+    import GoogleScraping.AccountsFixtures
 
     @invalid_attrs %{name: nil}
 
@@ -21,7 +22,8 @@ defmodule GoogleScraping.DashboardTest do
     end
 
     test "create_keyword/1 with valid data creates a keyword" do
-      valid_attrs = %{name: "some name"}
+      user = user_fixture()
+      valid_attrs = %{name: "some name", user_id: user.id}
 
       assert {:ok, %Keyword{} = keyword} = Dashboard.create_keyword(valid_attrs)
       assert keyword.name == "some name"

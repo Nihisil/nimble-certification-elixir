@@ -7,11 +7,17 @@ defmodule GoogleScraping.DashboardFixtures do
   @doc """
   Generate a keyword.
   """
+
+  import GoogleScraping.AccountsFixtures
+
   def keyword_fixture(attrs \\ %{}) do
+    user = user_fixture()
+
     {:ok, keyword} =
       attrs
       |> Enum.into(%{
-        name: "some name"
+        name: Faker.Lorem.word(),
+        user_id: user.id
       })
       |> GoogleScraping.Dashboard.create_keyword()
 
