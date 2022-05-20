@@ -125,6 +125,8 @@ defmodule GoogleScraping.Accounts.User do
     false
   end
 
+  @spec validate_current_password(atom | %{:data => any, optional(any) => any}, any) ::
+          atom | %{:data => any, optional(any) => any}
   @doc """
   Validates the current password otherwise adds an error to the changeset.
   """
