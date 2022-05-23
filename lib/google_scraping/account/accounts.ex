@@ -7,6 +7,7 @@ defmodule GoogleScraping.Accounts do
 
   alias GoogleScraping.Accounts.User
   alias GoogleScraping.Accounts.UserToken
+  alias GoogleScraping.Accounts.UserTokenQueries
   alias GoogleScraping.Repo
 
   ## Database getters
@@ -94,7 +95,7 @@ defmodule GoogleScraping.Accounts do
   Gets the user with the given signed token.
   """
   def get_user_by_session_token(token) do
-    {:ok, query} = UserToken.verify_session_token_query(token)
+    {:ok, query} = UserTokenQueries.verify_session_token_query(token)
     Repo.one(query)
   end
 
@@ -102,7 +103,7 @@ defmodule GoogleScraping.Accounts do
   Deletes the signed token with the given context.
   """
   def delete_session_token(token) do
-    Repo.delete_all(UserToken.token_and_context_query(token, "session"))
+    Repo.delete_all(UserTokenQueries.token_and_context_query(token, "session"))
     :ok
   end
 end
