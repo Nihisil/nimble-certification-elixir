@@ -8,27 +8,27 @@ defmodule GoogleScraping.AccountsTest do
   alias GoogleScraping.Accounts.UserToken
 
   describe "get_user_by_email/1" do
-    test "does not return the user if the email does not exist" do
+    test "when the email does not exist, does not return the user" do
       refute Accounts.get_user_by_email("unknown@example.com")
     end
 
-    test "returns the user if the email exists" do
+    test "when the email exists, returns the user" do
       %{id: id} = user = user_fixture()
       assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
     end
   end
 
   describe "get_user_by_email_and_password/2" do
-    test "does not return the user if the email does not exist" do
+    test "when the email does not exist, does not return the user" do
       refute Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
     end
 
-    test "does not return the user if the password is not valid" do
+    test "when password is invalid, does not return the user" do
       user = user_fixture()
       refute Accounts.get_user_by_email_and_password(user.email, "invalid")
     end
 
-    test "returns the user if the email and password are valid" do
+    test "when email and password are valid, returns the user" do
       %{id: id} = user = user_fixture()
 
       assert %User{id: ^id} =
@@ -37,20 +37,20 @@ defmodule GoogleScraping.AccountsTest do
   end
 
   describe "get_user!/1" do
-    test "raises if id is invalid" do
+    test "when id is invalid, raises error" do
       assert_raise Ecto.NoResultsError, fn ->
         Accounts.get_user!(-1)
       end
     end
 
-    test "returns the user with the given id" do
+    test "when id is invalid, returns the user" do
       %{id: id} = user = user_fixture()
       assert %User{id: ^id} = Accounts.get_user!(user.id)
     end
   end
 
   describe "register_user/1" do
-    test "requires email and password to be set" do
+    test "when email and password are not set, show cant be blank error" do
       {:error, changeset} = Accounts.register_user(%{})
 
       assert %{
@@ -59,7 +59,7 @@ defmodule GoogleScraping.AccountsTest do
              } = errors_on(changeset)
     end
 
-    test "validates email and password when given" do
+    test "when email and password are not valid, shows validation errors" do
       {:error, changeset} = Accounts.register_user(%{email: "not valid", password: "not valid"})
 
       assert %{
@@ -68,14 +68,14 @@ defmodule GoogleScraping.AccountsTest do
              } = errors_on(changeset)
     end
 
-    test "validates maximum values for email and password for security" do
+    test "when email and password are long, shows validation errors" do
       too_long = String.duplicate("db", 100)
       {:error, changeset} = Accounts.register_user(%{email: too_long, password: too_long})
       assert "should be at most 160 character(s)" in errors_on(changeset).email
       assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
-    test "validates email uniqueness" do
+    test "when email is not unique, shows validation error" do
       %{email: email} = user_fixture()
       {:error, changeset} = Accounts.register_user(%{email: email})
       assert "has already been taken" in errors_on(changeset).email
@@ -85,7 +85,7 @@ defmodule GoogleScraping.AccountsTest do
       assert "has already been taken" in errors_on(upper_case_changeset).email
     end
 
-    test "registers users with a hashed password" do
+    test "with valid email and password, registers user with a hashed password" do
       email = unique_user_email()
       {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
       assert user.email == email
@@ -100,7 +100,7 @@ defmodule GoogleScraping.AccountsTest do
       %{user: user_fixture()}
     end
 
-    test "generates a token", %{user: user} do
+    test "with passed user, generates a token", %{user: user} do
       token = Accounts.generate_user_session_token(user)
       assert user_token = Repo.get_by(UserToken, token: token)
       assert user_token.context == "session"
@@ -123,16 +123,16 @@ defmodule GoogleScraping.AccountsTest do
       %{user: user, token: token}
     end
 
-    test "returns user by token", %{user: user, token: token} do
+    test "with valid token, returns user by token", %{user: user, token: token} do
       assert session_user = Accounts.get_user_by_session_token(token)
       assert session_user.id == user.id
     end
 
-    test "does not return user for invalid token" do
+    test "when invalid token, does not return user" do
       refute Accounts.get_user_by_session_token("oops")
     end
 
-    test "does not return user for expired token", %{token: token} do
+    test "when expired token, does not return user", %{token: token} do
       {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
       refute Accounts.get_user_by_session_token(token)
     end
@@ -148,7 +148,7 @@ defmodule GoogleScraping.AccountsTest do
   end
 
   describe "inspect/2" do
-    test "does not include password" do
+    test "with user changeset, does not include password" do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end

@@ -4,14 +4,14 @@ defmodule GoogleScrapingWeb.UserRegistrationControllerTest do
   import GoogleScraping.AccountsFixtures
 
   describe "GET /users/register" do
-    test "renders registration page", %{conn: conn} do
+    test "when does not logged in, renders registration page", %{conn: conn} do
       conn = get(conn, Routes.user_registration_path(conn, :new))
       response = html_response(conn, 200)
       assert response =~ "<h2>Register</h2>"
       assert response =~ "Log in</a>"
     end
 
-    test "redirects if already logged in", %{conn: conn} do
+    test "when already logged in, redirects to home page", %{conn: conn} do
       conn = conn |> log_in_user(user_fixture()) |> get(Routes.user_registration_path(conn, :new))
       assert redirected_to(conn) == "/"
     end
@@ -19,7 +19,7 @@ defmodule GoogleScrapingWeb.UserRegistrationControllerTest do
 
   describe "POST /users/register" do
     @tag :capture_log
-    test "creates account and logs the user in", %{conn: conn} do
+    test "with valid data, creates account and logs the user in", %{conn: conn} do
       email = unique_user_email()
 
       conn =
@@ -37,7 +37,7 @@ defmodule GoogleScrapingWeb.UserRegistrationControllerTest do
       assert response =~ "Log out</a>"
     end
 
-    test "render errors for invalid data", %{conn: conn} do
+    test "with invalid data, render errors", %{conn: conn} do
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
           "user" => %{"email" => "with spaces", "password" => "too short"}

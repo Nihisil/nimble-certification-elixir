@@ -1,5 +1,6 @@
 defmodule GoogleScraping.Accounts.UserToken do
   use Ecto.Schema
+
   alias GoogleScraping.Accounts.UserToken
 
   @rand_size 32
@@ -8,6 +9,7 @@ defmodule GoogleScraping.Accounts.UserToken do
     field :token, :binary
     field :context, :string
     field :sent_to, :string
+
     belongs_to :user, GoogleScraping.Accounts.User
 
     timestamps(updated_at: false)

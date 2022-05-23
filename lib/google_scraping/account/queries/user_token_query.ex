@@ -1,6 +1,8 @@
 defmodule GoogleScraping.Accounts.UserTokenQueries do
   use Ecto.Schema
+
   import Ecto.Query
+
   alias GoogleScraping.Accounts.UserToken
 
   @session_validity_in_days 60
