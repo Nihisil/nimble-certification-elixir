@@ -25,9 +25,7 @@ defmodule GoogleScraping.Accounts do
       nil
 
   """
-  def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
-  end
+  def get_user_by_email(email) when is_binary(email), do: Repo.get_by(User, email: email)
 
   @doc """
   Gets a user by email and password.
@@ -92,9 +90,8 @@ defmodule GoogleScraping.Accounts do
       %Ecto.Changeset{data: %User{}}
 
   """
-  def change_user_registration(%User{} = user, attrs \\ %{}) do
-    User.registration_changeset(user, attrs, hash_password: false)
-  end
+  def change_user_registration(%User{} = user, attrs \\ %{}),
+    do: User.registration_changeset(user, attrs, hash_password: false)
 
   ## Settings
 
@@ -107,9 +104,7 @@ defmodule GoogleScraping.Accounts do
       %Ecto.Changeset{data: %User{}}
 
   """
-  def change_user_email(user, attrs \\ %{}) do
-    User.email_changeset(user, attrs)
-  end
+  def change_user_email(user, attrs \\ %{}), do: User.email_changeset(user, attrs)
 
   @doc """
   Emulates that the email will change without actually changing
@@ -186,9 +181,8 @@ defmodule GoogleScraping.Accounts do
       %Ecto.Changeset{data: %User{}}
 
   """
-  def change_user_password(user, attrs \\ %{}) do
-    User.password_changeset(user, attrs, hash_password: false)
-  end
+  def change_user_password(user, attrs \\ %{}),
+    do: User.password_changeset(user, attrs, hash_password: false)
 
   @doc """
   Updates the user password.

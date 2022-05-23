@@ -4,9 +4,7 @@ defmodule GoogleScrapingWeb.UserSessionController do
   alias GoogleScraping.Accounts
   alias GoogleScrapingWeb.UserAuth
 
-  def new(conn, _params) do
-    render(conn, "new.html", error_message: nil)
-  end
+  def new(conn, _params), do: render(conn, "new.html", error_message: nil)
 
   def create(conn, %{"user" => user_params}) do
     %{"email" => email, "password" => password} = user_params

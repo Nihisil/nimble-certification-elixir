@@ -76,9 +76,7 @@ defmodule GoogleScraping.Accounts.UserToken do
   Users can easily adapt the existing code to provide other types of delivery methods,
   for example, by phone numbers.
   """
-  def build_email_token(user, context) do
-    build_hashed_token(user, context, user.email)
-  end
+  def build_email_token(user, context), do: build_hashed_token(user, context, user.email)
 
   defp build_hashed_token(user, context, sent_to) do
     token = :crypto.strong_rand_bytes(@rand_size)
@@ -154,18 +152,14 @@ defmodule GoogleScraping.Accounts.UserToken do
   @doc """
   Returns the token struct for the given token value and context.
   """
-  def token_and_context_query(token, context) do
-    from UserToken, where: [token: ^token, context: ^context]
-  end
+  def token_and_context_query(token, context),
+    do: from(UserToken, where: [token: ^token, context: ^context])
 
   @doc """
   Gets all tokens for the given user for the given contexts.
   """
-  def user_and_contexts_query(user, :all) do
-    from t in UserToken, where: t.user_id == ^user.id
-  end
+  def user_and_contexts_query(user, :all), do: from(t in UserToken, where: t.user_id == ^user.id)
 
-  def user_and_contexts_query(user, [_ | _] = contexts) do
-    from t in UserToken, where: t.user_id == ^user.id and t.context in ^contexts
-  end
+  def user_and_contexts_query(user, [_ | _] = contexts),
+    do: from(t in UserToken, where: t.user_id == ^user.id and t.context in ^contexts)
 end

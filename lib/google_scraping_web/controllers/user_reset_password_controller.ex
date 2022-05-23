@@ -5,9 +5,7 @@ defmodule GoogleScrapingWeb.UserResetPasswordController do
 
   plug :get_user_by_reset_password_token when action in [:edit, :update]
 
-  def new(conn, _params) do
-    render(conn, "new.html")
-  end
+  def new(conn, _params), do: render(conn, "new.html")
 
   def create(conn, %{"user" => %{"email" => email}}) do
     if user = Accounts.get_user_by_email(email) do
@@ -25,9 +23,8 @@ defmodule GoogleScrapingWeb.UserResetPasswordController do
     |> redirect(to: "/")
   end
 
-  def edit(conn, _params) do
-    render(conn, "edit.html", changeset: Accounts.change_user_password(conn.assigns.user))
-  end
+  def edit(conn, _params),
+    do: render(conn, "edit.html", changeset: Accounts.change_user_password(conn.assigns.user))
 
   # Do not log in the user after reset password to avoid a
   # leaked token giving the user access to the account.
