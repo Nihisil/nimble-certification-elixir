@@ -35,34 +35,6 @@ defmodule GoogleScraping.Accounts.User do
     |> validate_password()
   end
 
-  defp validate_email(changeset) do
-    changeset
-    |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
-    |> validate_length(:email, max: 160)
-    |> unsafe_validate_unique(:email, GoogleScraping.Repo)
-    |> unique_constraint(:email)
-  end
-
-  defp validate_password(changeset) do
-    changeset
-    |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 72)
-    |> maybe_hash_password()
-  end
-
-  defp maybe_hash_password(
-         %Ecto.Changeset{changes: %{password: password}, valid?: true} = changeset
-       ) do
-    changeset
-    # If using Bcrypt, then further validate it is at most 72 bytes long
-    |> validate_length(:password, max: 72, count: :bytes)
-    |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
-    |> delete_change(:password)
-  end
-
-  defp maybe_hash_password(changeset), do: changeset
-
   @doc """
   A user changeset for changing the email.
 
@@ -131,4 +103,32 @@ defmodule GoogleScraping.Accounts.User do
       add_error(changeset, :current_password, "is not valid")
     end
   end
+
+  defp validate_email(changeset) do
+    changeset
+    |> validate_required([:email])
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
+    |> validate_length(:email, max: 160)
+    |> unsafe_validate_unique(:email, GoogleScraping.Repo)
+    |> unique_constraint(:email)
+  end
+
+  defp validate_password(changeset) do
+    changeset
+    |> validate_required([:password])
+    |> validate_length(:password, min: 12, max: 72)
+    |> maybe_hash_password()
+  end
+
+  defp maybe_hash_password(
+         %Ecto.Changeset{changes: %{password: password}, valid?: true} = changeset
+       ) do
+    changeset
+    # If using Bcrypt, then further validate it is at most 72 bytes long
+    |> validate_length(:password, max: 72, count: :bytes)
+    |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
+    |> delete_change(:password)
+  end
+
+  defp maybe_hash_password(changeset), do: changeset
 end

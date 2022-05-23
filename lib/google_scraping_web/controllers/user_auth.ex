@@ -36,32 +36,6 @@ defmodule GoogleScrapingWeb.UserAuth do
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
 
-  defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}),
-    do: put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
-
-  defp maybe_write_remember_me_cookie(conn, _token, _params), do: conn
-
-  # This function renews the session ID and erases the whole
-  # session to avoid fixation attacks. If there is any data
-  # in the session you may want to preserve after log in/log out,
-  # you must explicitly fetch the session data before clearing
-  # and then immediately set it after clearing, for example:
-  #
-  #     defp renew_session(conn) do
-  #       preferred_locale = get_session(conn, :preferred_locale)
-  #
-  #       conn
-  #       |> configure_session(renew: true)
-  #       |> clear_session()
-  #       |> put_session(:preferred_locale, preferred_locale)
-  #     end
-  #
-  defp renew_session(conn) do
-    conn
-    |> configure_session(renew: true)
-    |> clear_session()
-  end
-
   @doc """
   Logs the user out.
 
@@ -89,20 +63,6 @@ defmodule GoogleScrapingWeb.UserAuth do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
     assign(conn, :current_user, user)
-  end
-
-  defp ensure_user_token(conn) do
-    if user_token = get_session(conn, :user_token) do
-      {user_token, conn}
-    else
-      conn = fetch_cookies(conn, signed: [@remember_me_cookie])
-
-      if user_token = conn.cookies[@remember_me_cookie] do
-        {user_token, put_session(conn, :user_token, user_token)}
-      else
-        {nil, conn}
-      end
-    end
   end
 
   @doc """
@@ -142,4 +102,44 @@ defmodule GoogleScrapingWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/"
+
+  defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}),
+    do: put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
+
+  defp maybe_write_remember_me_cookie(conn, _token, _params), do: conn
+
+  # This function renews the session ID and erases the whole
+  # session to avoid fixation attacks. If there is any data
+  # in the session you may want to preserve after log in/log out,
+  # you must explicitly fetch the session data before clearing
+  # and then immediately set it after clearing, for example:
+  #
+  #     defp renew_session(conn) do
+  #       preferred_locale = get_session(conn, :preferred_locale)
+  #
+  #       conn
+  #       |> configure_session(renew: true)
+  #       |> clear_session()
+  #       |> put_session(:preferred_locale, preferred_locale)
+  #     end
+  #
+  defp renew_session(conn) do
+    conn
+    |> configure_session(renew: true)
+    |> clear_session()
+  end
+
+  defp ensure_user_token(conn) do
+    if user_token = get_session(conn, :user_token) do
+      {user_token, conn}
+    else
+      conn = fetch_cookies(conn, signed: [@remember_me_cookie])
+
+      if user_token = conn.cookies[@remember_me_cookie] do
+        {user_token, put_session(conn, :user_token, user_token)}
+      else
+        {nil, conn}
+      end
+    end
+  end
 end

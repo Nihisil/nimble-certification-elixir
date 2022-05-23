@@ -78,19 +78,6 @@ defmodule GoogleScraping.Accounts.UserToken do
   """
   def build_email_token(user, context), do: build_hashed_token(user, context, user.email)
 
-  defp build_hashed_token(user, context, sent_to) do
-    token = :crypto.strong_rand_bytes(@rand_size)
-    hashed_token = :crypto.hash(@hash_algorithm, token)
-
-    {Base.url_encode64(token, padding: false),
-     %UserToken{
-       token: hashed_token,
-       context: context,
-       sent_to: sent_to,
-       user_id: user.id
-     }}
-  end
-
   @doc """
   Checks if the token is valid and returns its underlying lookup query.
 
@@ -119,8 +106,6 @@ defmodule GoogleScraping.Accounts.UserToken do
         {:ok, query}
     end
   end
-
-  defp days_for_context("reset_password"), do: @reset_password_validity_in_days
 
   @doc """
   Checks if the token is valid and returns its underlying lookup query.
@@ -162,4 +147,19 @@ defmodule GoogleScraping.Accounts.UserToken do
 
   def user_and_contexts_query(user, [_ | _] = contexts),
     do: from(t in UserToken, where: t.user_id == ^user.id and t.context in ^contexts)
+
+  defp build_hashed_token(user, context, sent_to) do
+    token = :crypto.strong_rand_bytes(@rand_size)
+    hashed_token = :crypto.hash(@hash_algorithm, token)
+
+    {Base.url_encode64(token, padding: false),
+     %UserToken{
+       token: hashed_token,
+       context: context,
+       sent_to: sent_to,
+       user_id: user.id
+     }}
+  end
+
+  defp days_for_context("reset_password"), do: @reset_password_validity_in_days
 end
