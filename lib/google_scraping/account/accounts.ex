@@ -5,11 +5,11 @@ defmodule GoogleScraping.Accounts do
 
   import Ecto.Query, warn: false
 
-  alias GoogleScraping.Repo
-
+  alias Ecto.Multi
   alias GoogleScraping.Accounts.User
   alias GoogleScraping.Accounts.UserNotifier
   alias GoogleScraping.Accounts.UserToken
+  alias GoogleScraping.Repo
 
   ## Database getters
 
@@ -150,9 +150,9 @@ defmodule GoogleScraping.Accounts do
       |> User.email_changeset(%{email: email})
       |> User.confirm_changeset()
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, [context]))
+    Multi.new()
+    |> Multi.update(:user, changeset)
+    |> Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, [context]))
   end
 
   @doc """
@@ -202,9 +202,9 @@ defmodule GoogleScraping.Accounts do
       |> User.password_changeset(attrs)
       |> User.validate_current_password(password)
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    Multi.new()
+    |> Multi.update(:user, changeset)
+    |> Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
@@ -291,9 +291,9 @@ defmodule GoogleScraping.Accounts do
 
   """
   def reset_user_password(user, attrs) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    Multi.new()
+    |> Multi.update(:user, User.password_changeset(user, attrs))
+    |> Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
