@@ -28,11 +28,11 @@ defmodule GoogleScraping.Accounts.User do
       validations on a LiveView form), this option can be set to `false`.
       Defaults to `true`.
   """
-  def registration_changeset(user, attrs, opts \\ []) do
+  def registration_changeset(user \\ %__MODULE__{}, attrs \\ %{}) do
     user
     |> cast(attrs, [:email, :password])
     |> validate_email()
-    |> validate_password(opts)
+    |> validate_password()
   end
 
   defp validate_email(changeset) do
@@ -44,27 +44,24 @@ defmodule GoogleScraping.Accounts.User do
     |> unique_constraint(:email)
   end
 
-  defp validate_password(changeset, opts) do
+  defp validate_password(changeset) do
     changeset
     |> validate_required([:password])
     |> validate_length(:password, min: 12, max: 72)
-    |> maybe_hash_password(opts)
+    |> maybe_hash_password()
   end
 
-  defp maybe_hash_password(changeset, opts) do
-    hash_password? = Keyword.get(opts, :hash_password, true)
-    password = get_change(changeset, :password)
-
-    if hash_password? && password && changeset.valid? do
-      changeset
-      # If using Bcrypt, then further validate it is at most 72 bytes long
-      |> validate_length(:password, max: 72, count: :bytes)
-      |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
-      |> delete_change(:password)
-    else
-      changeset
-    end
+  defp maybe_hash_password(
+         %Ecto.Changeset{changes: %{password: password}, valid?: true} = changeset
+       ) do
+    changeset
+    # If using Bcrypt, then further validate it is at most 72 bytes long
+    |> validate_length(:password, max: 72, count: :bytes)
+    |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
+    |> delete_change(:password)
   end
+
+  defp maybe_hash_password(changeset), do: changeset
 
   @doc """
   A user changeset for changing the email.
@@ -93,11 +90,11 @@ defmodule GoogleScraping.Accounts.User do
       validations on a LiveView form), this option can be set to `false`.
       Defaults to `true`.
   """
-  def password_changeset(user, attrs, opts \\ []) do
+  def password_changeset(user, attrs) do
     user
     |> cast(attrs, [:password])
     |> validate_confirmation(:password, message: "does not match password")
-    |> validate_password(opts)
+    |> validate_password()
   end
 
   @doc """

@@ -6,7 +6,7 @@ defmodule GoogleScrapingWeb.UserRegistrationController do
   alias GoogleScrapingWeb.UserAuth
 
   def new(conn, _params) do
-    changeset = Accounts.change_user_registration(%User{})
+    changeset = User.registration_changeset()
     render(conn, "new.html", changeset: changeset)
   end
 
