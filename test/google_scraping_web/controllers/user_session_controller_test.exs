@@ -8,21 +8,21 @@ defmodule GoogleScrapingWeb.UserSessionControllerTest do
   end
 
   describe "GET /users/log_in" do
-    test "renders log in page", %{conn: conn} do
+    test "when does not logged in, renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
       assert response =~ "<h2>Log in</h2>"
       assert response =~ "Sign up</a>"
     end
 
-    test "redirects if already logged in", %{conn: conn, user: user} do
+    test "when already logged in, redirects to home page", %{conn: conn, user: user} do
       conn = conn |> log_in_user(user) |> get(Routes.user_session_path(conn, :new))
       assert redirected_to(conn) == "/"
     end
   end
 
   describe "POST /users/log_in" do
-    test "logs the user in", %{conn: conn, user: user} do
+    test "with valid data, logs the user in", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
           "user" => %{"email" => user.email, "password" => valid_user_password()}
@@ -38,7 +38,7 @@ defmodule GoogleScrapingWeb.UserSessionControllerTest do
       assert response =~ "Log out</a>"
     end
 
-    test "logs the user in with remember me", %{conn: conn, user: user} do
+    test "with remember me flag, logs the user in", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
           "user" => %{
@@ -52,7 +52,7 @@ defmodule GoogleScrapingWeb.UserSessionControllerTest do
       assert redirected_to(conn) == "/"
     end
 
-    test "logs the user in with return to", %{conn: conn, user: user} do
+    test "with return to, logs the user in", %{conn: conn, user: user} do
       conn =
         conn
         |> init_test_session(user_return_to: "/foo/bar")
@@ -66,7 +66,7 @@ defmodule GoogleScrapingWeb.UserSessionControllerTest do
       assert redirected_to(conn) == "/foo/bar"
     end
 
-    test "emits error message with invalid credentials", %{conn: conn, user: user} do
+    test "with invalid credentials, emits error message", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
           "user" => %{"email" => user.email, "password" => "invalid_password"}
@@ -79,14 +79,14 @@ defmodule GoogleScrapingWeb.UserSessionControllerTest do
   end
 
   describe "DELETE /users/log_out" do
-    test "logs the user out", %{conn: conn, user: user} do
+    test "with valid data, logs the user out", %{conn: conn, user: user} do
       conn = conn |> log_in_user(user) |> delete(Routes.user_session_path(conn, :delete))
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"
     end
 
-    test "succeeds even if the user is not logged in", %{conn: conn} do
+    test "when user is not logged in, still succeeds", %{conn: conn} do
       conn = delete(conn, Routes.user_session_path(conn, :delete))
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
