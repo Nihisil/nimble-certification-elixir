@@ -2,7 +2,7 @@ defmodule GoogleScrapingWeb.UserRegistrationController do
   use GoogleScrapingWeb, :controller
 
   alias GoogleScraping.Accounts
-  alias GoogleScraping.Accounts.User
+  alias GoogleScraping.Accounts.Schemas.User
   alias GoogleScrapingWeb.UserAuth
 
   def new(conn, _params) do

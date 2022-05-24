@@ -4,12 +4,12 @@ defmodule GoogleScraping.AccountsTest do
   import GoogleScraping.AccountsFixtures
 
   alias GoogleScraping.Accounts
-  alias GoogleScraping.Accounts.User
-  alias GoogleScraping.Accounts.UserToken
+  alias GoogleScraping.Accounts.Schemas.User
+  alias GoogleScraping.Accounts.Schemas.UserToken
 
   describe "get_user_by_email/1" do
     test "when the email does not exist, does not return the user" do
-      refute Accounts.get_user_by_email("unknown@example.com")
+      assert Accounts.get_user_by_email("unknown@example.com") == nil
     end
 
     test "when the email exists, returns the user" do
@@ -20,12 +20,12 @@ defmodule GoogleScraping.AccountsTest do
 
   describe "get_user_by_email_and_password/2" do
     test "when the email does not exist, does not return the user" do
-      refute Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
+      assert Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!") == nil
     end
 
     test "when password is invalid, does not return the user" do
       user = user_fixture()
-      refute Accounts.get_user_by_email_and_password(user.email, "invalid")
+      assert Accounts.get_user_by_email_and_password(user.email, "invalid") == nil
     end
 
     test "when email and password are valid, returns the user" do
@@ -50,22 +50,22 @@ defmodule GoogleScraping.AccountsTest do
   end
 
   describe "register_user/1" do
-    test "when email and password are not set, show cant be blank error" do
+    test "when email and password are not set, show can't be blank error" do
       {:error, changeset} = Accounts.register_user(%{})
 
-      assert %{
+      assert errors_on(changeset) == %{
                password: ["can't be blank"],
                email: ["can't be blank"]
-             } = errors_on(changeset)
+             }
     end
 
     test "when email and password are not valid, shows validation errors" do
       {:error, changeset} = Accounts.register_user(%{email: "not valid", password: "not valid"})
 
-      assert %{
+      assert errors_on(changeset) == %{
                email: ["must have the @ sign and no spaces"],
                password: ["should be at least 12 character(s)"]
-             } = errors_on(changeset)
+             }
     end
 
     test "when email and password are long, shows validation errors" do
@@ -129,12 +129,12 @@ defmodule GoogleScraping.AccountsTest do
     end
 
     test "when invalid token, does not return user" do
-      refute Accounts.get_user_by_session_token("oops")
+      assert Accounts.get_user_by_session_token("oops") == nil
     end
 
     test "when expired token, does not return user", %{token: token} do
       {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
-      refute Accounts.get_user_by_session_token(token)
+      assert Accounts.get_user_by_session_token(token) == nil
     end
   end
 
@@ -143,13 +143,13 @@ defmodule GoogleScraping.AccountsTest do
       user = user_fixture()
       token = Accounts.generate_user_session_token(user)
       assert Accounts.delete_session_token(token) == :ok
-      refute Accounts.get_user_by_session_token(token)
+      assert Accounts.get_user_by_session_token(token) == nil
     end
   end
 
   describe "inspect/2" do
     test "with user changeset, does not include password" do
-      refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
+      assert inspect(%User{password: "123456"}) =~ "password: \"123456\"" == false
     end
   end
 end

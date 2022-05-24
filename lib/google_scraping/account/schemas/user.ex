@@ -1,4 +1,4 @@
-defmodule GoogleScraping.Accounts.User do
+defmodule GoogleScraping.Accounts.Schemas.User do
   use Ecto.Schema
 
   import Ecto.Changeset

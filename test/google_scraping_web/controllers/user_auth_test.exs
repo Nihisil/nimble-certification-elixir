@@ -31,7 +31,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
       user: user
     } do
       conn = conn |> put_session(:to_be_removed, "value") |> UserAuth.log_in_user(user)
-      refute get_session(conn, :to_be_removed)
+      assert get_session(conn, :to_be_removed) == nil
     end
 
     test "when log in, redirects to the configured path", %{conn: conn, user: user} do
@@ -60,11 +60,11 @@ defmodule GoogleScrapingWeb.UserAuthTest do
         |> fetch_cookies()
         |> UserAuth.log_out_user()
 
-      refute get_session(conn, :user_token)
-      refute conn.cookies[@remember_me_cookie]
+      assert get_session(conn, :user_token) == nil
+      assert conn.cookies[@remember_me_cookie] == nil
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
       assert redirected_to(conn) == "/"
-      refute Accounts.get_user_by_session_token(user_token)
+      assert Accounts.get_user_by_session_token(user_token) == nil
     end
 
     test "when logout, broadcasts to the given live_socket_id", %{conn: conn} do
@@ -80,7 +80,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
 
     test "when logout, works even if user is already logged out", %{conn: conn} do
       conn = conn |> fetch_cookies() |> UserAuth.log_out_user()
-      refute get_session(conn, :user_token)
+      assert get_session(conn, :user_token) == nil
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
       assert redirected_to(conn) == "/"
     end
@@ -112,8 +112,8 @@ defmodule GoogleScrapingWeb.UserAuthTest do
     test "with missing data, does not authenticate", %{conn: conn, user: user} do
       _ = Accounts.generate_user_session_token(user)
       conn = UserAuth.fetch_current_user(conn, [])
-      refute get_session(conn, :user_token)
-      refute conn.assigns.current_user
+      assert get_session(conn, :user_token) == nil
+      assert conn.assigns.current_user == nil
     end
   end
 
@@ -126,8 +126,8 @@ defmodule GoogleScrapingWeb.UserAuthTest do
 
     test "when user is not authenticated, does not redirect", %{conn: conn} do
       conn = UserAuth.redirect_if_user_is_authenticated(conn, [])
-      refute conn.halted
-      refute conn.status
+      assert conn.halted == false
+      assert conn.status == nil
     end
   end
 
@@ -162,13 +162,13 @@ defmodule GoogleScrapingWeb.UserAuthTest do
         |> UserAuth.require_authenticated_user([])
 
       assert post_halted_conn.halted
-      refute get_session(post_halted_conn, :user_return_to)
+      assert get_session(post_halted_conn, :user_return_to) == nil
     end
 
     test "when user is authenticated, does not redirect", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.require_authenticated_user([])
-      refute conn.halted
-      refute conn.status
+      assert conn.halted == false
+      assert conn.status == nil
     end
   end
 end
