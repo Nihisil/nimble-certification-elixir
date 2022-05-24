@@ -1,12 +1,13 @@
-defmodule GoogleScraping.Dashboard.Keyword do
+defmodule GoogleScraping.Dashboard.Schemas.Keyword do
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "keywords" do
     field :name, :string
     field :status, Ecto.Enum, values: [:new, :in_progress, :completed]
 
-    belongs_to :user, GoogleScraping.Accounts.User
+    belongs_to :user, GoogleScraping.Accounts.Schemas.User
 
     timestamps()
   end

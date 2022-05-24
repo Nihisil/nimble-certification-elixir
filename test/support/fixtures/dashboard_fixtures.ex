@@ -1,14 +1,7 @@
 defmodule GoogleScraping.DashboardFixtures do
-  @moduledoc """
-  This module defines test helpers for creating
-  entities via the `GoogleScraping.Dashboard` context.
-  """
-
-  @doc """
-  Generate a keyword.
-  """
-
   import GoogleScraping.AccountsFixtures
+
+  @fixture_path "test/support/fixtures"
 
   def keyword_fixture(attrs \\ %{}) do
     user = user_fixture()
@@ -22,5 +15,15 @@ defmodule GoogleScraping.DashboardFixtures do
       |> GoogleScraping.Dashboard.create_keyword()
 
     keyword
+  end
+
+  def file_fixture(file_path) do
+    file_path = Path.join([@fixture_path, file_path])
+
+    %Plug.Upload{
+      path: file_path,
+      filename: Path.basename(file_path),
+      content_type: MIME.from_path(file_path)
+    }
   end
 end
