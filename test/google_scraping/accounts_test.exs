@@ -4,8 +4,7 @@ defmodule GoogleScraping.AccountsTest do
   import GoogleScraping.AccountsFixtures
 
   alias GoogleScraping.Accounts
-  alias GoogleScraping.Accounts.Schemas.User
-  alias GoogleScraping.Accounts.Schemas.UserToken
+  alias GoogleScraping.Accounts.Schemas.{User, UserToken}
 
   describe "get_user_by_email/1" do
     test "when the email does not exist, does not return the user" do
