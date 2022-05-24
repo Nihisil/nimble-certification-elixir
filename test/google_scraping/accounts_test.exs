@@ -1,8 +1,6 @@
 defmodule GoogleScraping.AccountsTest do
   use GoogleScraping.DataCase
 
-  import GoogleScraping.AccountsFixtures
-
   alias GoogleScraping.Accounts
   alias GoogleScraping.Accounts.Schemas.{User, UserToken}
 
@@ -12,7 +10,7 @@ defmodule GoogleScraping.AccountsTest do
     end
 
     test "when the email exists, returns the user" do
-      %{id: id} = user = user_fixture()
+      %{id: id} = user = insert(:user)
       assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
     end
   end
@@ -23,12 +21,12 @@ defmodule GoogleScraping.AccountsTest do
     end
 
     test "when password is invalid, does not return the user" do
-      user = user_fixture()
+      user = insert(:user)
       assert Accounts.get_user_by_email_and_password(user.email, "invalid") == nil
     end
 
     test "when email and password are valid, returns the user" do
-      %{id: id} = user = user_fixture()
+      %{id: id} = user = insert(:user)
 
       assert %User{id: ^id} =
                Accounts.get_user_by_email_and_password(user.email, valid_user_password())
@@ -43,7 +41,7 @@ defmodule GoogleScraping.AccountsTest do
     end
 
     test "when id is invalid, returns the user" do
-      %{id: id} = user = user_fixture()
+      %{id: id} = user = insert(:user)
       assert %User{id: ^id} = Accounts.get_user!(user.id)
     end
   end
@@ -69,13 +67,18 @@ defmodule GoogleScraping.AccountsTest do
 
     test "when email and password are long, shows validation errors" do
       too_long = String.duplicate("db", 100)
-      {:error, changeset} = Accounts.register_user(%{email: too_long, password: too_long})
-      assert "should be at most 160 character(s)" in errors_on(changeset).email
-      assert "should be at most 72 character(s)" in errors_on(changeset).password
+
+      invalid_email = "#{too_long}@#{too_long}"
+      {:error, changeset} = Accounts.register_user(%{email: invalid_email, password: too_long})
+
+      assert errors_on(changeset) == %{
+               email: ["should be at most 160 character(s)"],
+               password: ["should be at most 72 character(s)"]
+             }
     end
 
     test "when email is not unique, shows validation error" do
-      %{email: email} = user_fixture()
+      %{email: email} = insert(:user)
       {:error, changeset} = Accounts.register_user(%{email: email})
       assert "has already been taken" in errors_on(changeset).email
 
@@ -86,7 +89,13 @@ defmodule GoogleScraping.AccountsTest do
 
     test "with valid email and password, registers user with a hashed password" do
       email = unique_user_email()
-      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
+
+      {:ok, user} =
+        Accounts.register_user(%{
+          email: email,
+          password: valid_user_password()
+        })
+
       assert user.email == email
       assert is_binary(user.hashed_password)
       assert is_nil(user.confirmed_at)
@@ -96,7 +105,7 @@ defmodule GoogleScraping.AccountsTest do
 
   describe "generate_user_session_token/1" do
     setup do
-      %{user: user_fixture()}
+      %{user: insert(:user)}
     end
 
     test "with passed user, generates a token", %{user: user} do
@@ -108,7 +117,7 @@ defmodule GoogleScraping.AccountsTest do
       assert_raise Ecto.ConstraintError, fn ->
         Repo.insert!(%UserToken{
           token: user_token.token,
-          user_id: user_fixture().id,
+          user_id: insert(:user).id,
           context: "session"
         })
       end
@@ -117,7 +126,7 @@ defmodule GoogleScraping.AccountsTest do
 
   describe "get_user_by_session_token/1" do
     setup do
-      user = user_fixture()
+      user = insert(:user)
       token = Accounts.generate_user_session_token(user)
       %{user: user, token: token}
     end
@@ -139,7 +148,7 @@ defmodule GoogleScraping.AccountsTest do
 
   describe "delete_session_token/1" do
     test "deletes the token" do
-      user = user_fixture()
+      user = insert(:user)
       token = Accounts.generate_user_session_token(user)
       assert Accounts.delete_session_token(token) == :ok
       assert Accounts.get_user_by_session_token(token) == nil

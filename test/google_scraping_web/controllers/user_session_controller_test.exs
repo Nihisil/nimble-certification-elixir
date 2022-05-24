@@ -1,10 +1,8 @@
 defmodule GoogleScrapingWeb.UserSessionControllerTest do
   use GoogleScrapingWeb.ConnCase, async: true
 
-  import GoogleScraping.AccountsFixtures
-
   setup do
-    %{user: user_fixture()}
+    %{user: insert(:user)}
   end
 
   describe "GET /users/log_in" do

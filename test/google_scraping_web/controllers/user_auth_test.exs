@@ -1,8 +1,6 @@
 defmodule GoogleScrapingWeb.UserAuthTest do
   use GoogleScrapingWeb.ConnCase, async: true
 
-  import GoogleScraping.AccountsFixtures
-
   alias GoogleScraping.Accounts
   alias GoogleScrapingWeb.UserAuth
 
@@ -14,7 +12,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
       |> Map.replace!(:secret_key_base, GoogleScrapingWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    %{user: user_fixture(), conn: conn}
+    %{user: insert(:user), conn: conn}
   end
 
   describe "log_in_user/3" do
