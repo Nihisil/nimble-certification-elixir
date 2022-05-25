@@ -1,8 +1,6 @@
 defmodule GoogleScrapingWeb.UserRegistrationControllerTest do
   use GoogleScrapingWeb.ConnCase, async: true
 
-  import GoogleScraping.AccountsFixtures
-
   describe "GET /users/register" do
     test "when does not logged in, renders registration page", %{conn: conn} do
       conn = get(conn, Routes.user_registration_path(conn, :new))
@@ -12,7 +10,7 @@ defmodule GoogleScrapingWeb.UserRegistrationControllerTest do
     end
 
     test "when already logged in, redirects to home page", %{conn: conn} do
-      conn = conn |> log_in_user(user_fixture()) |> get(Routes.user_registration_path(conn, :new))
+      conn = conn |> log_in_user(insert(:user)) |> get(Routes.user_registration_path(conn, :new))
       assert redirected_to(conn) == "/"
     end
   end
@@ -24,7 +22,10 @@ defmodule GoogleScrapingWeb.UserRegistrationControllerTest do
 
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
-          "user" => valid_user_attributes(email: email)
+          "user" => %{
+            email: email,
+            password: valid_user_password()
+          }
         })
 
       assert get_session(conn, :user_token)

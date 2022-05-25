@@ -1,55 +1,67 @@
 defmodule GoogleScraping.AccountsTest do
   use GoogleScraping.DataCase
 
-  import GoogleScraping.AccountsFixtures
-
   alias GoogleScraping.Accounts
-  alias GoogleScraping.Accounts.Schemas.User
-  alias GoogleScraping.Accounts.Schemas.UserToken
+  alias GoogleScraping.Accounts.Schemas.{User, UserToken}
 
   describe "get_user_by_email/1" do
-    test "when the email does not exist, does not return the user" do
-      assert Accounts.get_user_by_email("unknown@example.com") == nil
+    test "when the email exists, returns the user" do
+      %{id: id} = user = insert(:user)
+      assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
     end
 
-    test "when the email exists, returns the user" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
+    test "when the email does not exist, does not return the user" do
+      assert Accounts.get_user_by_email("unknown@example.com") == nil
     end
   end
 
   describe "get_user_by_email_and_password/2" do
+    test "when email and password are valid, returns the user" do
+      %{id: id} = user = insert(:user)
+
+      assert %User{id: ^id} =
+               Accounts.get_user_by_email_and_password(user.email, valid_user_password())
+    end
+
     test "when the email does not exist, does not return the user" do
       assert Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!") == nil
     end
 
     test "when password is invalid, does not return the user" do
-      user = user_fixture()
+      user = insert(:user)
       assert Accounts.get_user_by_email_and_password(user.email, "invalid") == nil
-    end
-
-    test "when email and password are valid, returns the user" do
-      %{id: id} = user = user_fixture()
-
-      assert %User{id: ^id} =
-               Accounts.get_user_by_email_and_password(user.email, valid_user_password())
     end
   end
 
   describe "get_user!/1" do
+    test "when id is valid, returns the user" do
+      %{id: id} = user = insert(:user)
+      assert %User{id: ^id} = Accounts.get_user!(user.id)
+    end
+
     test "when id is invalid, raises error" do
       assert_raise Ecto.NoResultsError, fn ->
         Accounts.get_user!(-1)
       end
     end
-
-    test "when id is invalid, returns the user" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Accounts.get_user!(user.id)
-    end
   end
 
   describe "register_user/1" do
+    test "with valid email and password, registers user with a hashed password" do
+      email = unique_user_email()
+
+      {:ok, user} =
+        Accounts.register_user(%{
+          email: email,
+          password: valid_user_password()
+        })
+
+      assert user.email == email
+      assert is_binary(user.hashed_password)
+      assert is_nil(user.confirmed_at)
+      assert is_nil(user.password)
+    end
+
     test "when email and password are not set, show can't be blank error" do
       {:error, changeset} = Accounts.register_user(%{})
 
@@ -70,13 +82,18 @@ defmodule GoogleScraping.AccountsTest do
 
     test "when email and password are long, shows validation errors" do
       too_long = String.duplicate("db", 100)
-      {:error, changeset} = Accounts.register_user(%{email: too_long, password: too_long})
-      assert "should be at most 160 character(s)" in errors_on(changeset).email
-      assert "should be at most 72 character(s)" in errors_on(changeset).password
+
+      invalid_email = "#{too_long}@#{too_long}"
+      {:error, changeset} = Accounts.register_user(%{email: invalid_email, password: too_long})
+
+      assert errors_on(changeset) == %{
+               email: ["should be at most 160 character(s)"],
+               password: ["should be at most 72 character(s)"]
+             }
     end
 
     test "when email is not unique, shows validation error" do
-      %{email: email} = user_fixture()
+      %{email: email} = insert(:user)
       {:error, changeset} = Accounts.register_user(%{email: email})
       assert "has already been taken" in errors_on(changeset).email
 
@@ -84,20 +101,11 @@ defmodule GoogleScraping.AccountsTest do
       {:error, upper_case_changeset} = Accounts.register_user(%{email: String.upcase(email)})
       assert "has already been taken" in errors_on(upper_case_changeset).email
     end
-
-    test "with valid email and password, registers user with a hashed password" do
-      email = unique_user_email()
-      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
-      assert user.email == email
-      assert is_binary(user.hashed_password)
-      assert is_nil(user.confirmed_at)
-      assert is_nil(user.password)
-    end
   end
 
   describe "generate_user_session_token/1" do
     setup do
-      %{user: user_fixture()}
+      %{user: insert(:user)}
     end
 
     test "with passed user, generates a token", %{user: user} do
@@ -109,7 +117,7 @@ defmodule GoogleScraping.AccountsTest do
       assert_raise Ecto.ConstraintError, fn ->
         Repo.insert!(%UserToken{
           token: user_token.token,
-          user_id: user_fixture().id,
+          user_id: insert(:user).id,
           context: "session"
         })
       end
@@ -118,7 +126,7 @@ defmodule GoogleScraping.AccountsTest do
 
   describe "get_user_by_session_token/1" do
     setup do
-      user = user_fixture()
+      user = insert(:user)
       token = Accounts.generate_user_session_token(user)
       %{user: user, token: token}
     end
@@ -140,7 +148,7 @@ defmodule GoogleScraping.AccountsTest do
 
   describe "delete_session_token/1" do
     test "deletes the token" do
-      user = user_fixture()
+      user = insert(:user)
       token = Accounts.generate_user_session_token(user)
       assert Accounts.delete_session_token(token) == :ok
       assert Accounts.get_user_by_session_token(token) == nil
