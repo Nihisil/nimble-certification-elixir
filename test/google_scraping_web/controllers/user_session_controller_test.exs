@@ -84,11 +84,5 @@ defmodule GoogleScrapingWeb.UserSessionControllerTest do
       assert get_flash(conn, :info) =~ "Logged out successfully"
     end
 
-    test "when user is not logged in, still succeeds", %{conn: conn} do
-      conn = delete(conn, Routes.user_session_path(conn, :delete))
-      assert redirected_to(conn) == "/"
-      assert get_session(conn, :user_token) == nil
-      assert get_flash(conn, :info) =~ "Logged out successfully"
-    end
   end
 end
