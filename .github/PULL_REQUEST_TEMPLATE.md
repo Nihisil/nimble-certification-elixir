@@ -1,4 +1,4 @@
-https://github.com/nimblehq/git-template/issues/??
+https://github.com/Nihisil/nimble-certification-elixir/issues/??
 
 ## What happened 👀
 
