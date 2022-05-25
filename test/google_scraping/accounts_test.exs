@@ -5,17 +5,24 @@ defmodule GoogleScraping.AccountsTest do
   alias GoogleScraping.Accounts.Schemas.{User, UserToken}
 
   describe "get_user_by_email/1" do
-    test "when the email does not exist, does not return the user" do
-      assert Accounts.get_user_by_email("unknown@example.com") == nil
-    end
-
     test "when the email exists, returns the user" do
       %{id: id} = user = insert(:user)
       assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
     end
+
+    test "when the email does not exist, does not return the user" do
+      assert Accounts.get_user_by_email("unknown@example.com") == nil
+    end
   end
 
   describe "get_user_by_email_and_password/2" do
+    test "when email and password are valid, returns the user" do
+      %{id: id} = user = insert(:user)
+
+      assert %User{id: ^id} =
+               Accounts.get_user_by_email_and_password(user.email, valid_user_password())
+    end
+
     test "when the email does not exist, does not return the user" do
       assert Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!") == nil
     end
@@ -24,29 +31,37 @@ defmodule GoogleScraping.AccountsTest do
       user = insert(:user)
       assert Accounts.get_user_by_email_and_password(user.email, "invalid") == nil
     end
-
-    test "when email and password are valid, returns the user" do
-      %{id: id} = user = insert(:user)
-
-      assert %User{id: ^id} =
-               Accounts.get_user_by_email_and_password(user.email, valid_user_password())
-    end
   end
 
   describe "get_user!/1" do
+    test "when id is valid, returns the user" do
+      %{id: id} = user = insert(:user)
+      assert %User{id: ^id} = Accounts.get_user!(user.id)
+    end
+
     test "when id is invalid, raises error" do
       assert_raise Ecto.NoResultsError, fn ->
         Accounts.get_user!(-1)
       end
     end
-
-    test "when id is invalid, returns the user" do
-      %{id: id} = user = insert(:user)
-      assert %User{id: ^id} = Accounts.get_user!(user.id)
-    end
   end
 
   describe "register_user/1" do
+    test "with valid email and password, registers user with a hashed password" do
+      email = unique_user_email()
+
+      {:ok, user} =
+        Accounts.register_user(%{
+          email: email,
+          password: valid_user_password()
+        })
+
+      assert user.email == email
+      assert is_binary(user.hashed_password)
+      assert is_nil(user.confirmed_at)
+      assert is_nil(user.password)
+    end
+
     test "when email and password are not set, show can't be blank error" do
       {:error, changeset} = Accounts.register_user(%{})
 
@@ -85,21 +100,6 @@ defmodule GoogleScraping.AccountsTest do
       # Now try with the upper cased email too, to check that email case is ignored.
       {:error, upper_case_changeset} = Accounts.register_user(%{email: String.upcase(email)})
       assert "has already been taken" in errors_on(upper_case_changeset).email
-    end
-
-    test "with valid email and password, registers user with a hashed password" do
-      email = unique_user_email()
-
-      {:ok, user} =
-        Accounts.register_user(%{
-          email: email,
-          password: valid_user_password()
-        })
-
-      assert user.email == email
-      assert is_binary(user.hashed_password)
-      assert is_nil(user.confirmed_at)
-      assert is_nil(user.password)
     end
   end
 
