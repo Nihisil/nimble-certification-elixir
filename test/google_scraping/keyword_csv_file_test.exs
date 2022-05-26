@@ -14,7 +14,7 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFileTest do
     end
 
     test "when file is not CSV type, returns invalid changeset" do
-      attrs = %{file: keyword_file_fixture("invalid.txt")}
+      attrs = %{file: keyword_file_fixture("non_csv.txt")}
 
       changeset = KeywordCSVFile.create_changeset(%KeywordCSVFile{}, attrs)
 
@@ -47,6 +47,12 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFileTest do
       %{path: file_path} = keyword_file_fixture("big.csv")
 
       assert {:error, :file_is_too_long_error} = KeywordCSVFile.parse(file_path)
+    end
+
+    test "given an file with invalid keywords, returns error" do
+      %{path: file_path} = keyword_file_fixture("non_valid.csv")
+
+      assert {:error, :one_or_more_keywords_are_invalid} = KeywordCSVFile.parse(file_path)
     end
   end
 end

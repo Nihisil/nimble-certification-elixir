@@ -25,37 +25,46 @@ defmodule GoogleScrapingWeb.KeywordController do
       |> redirect(to: Routes.keyword_path(conn, :index))
     else
       %Ecto.Changeset{valid?: false} ->
-        show_changeset_errors(conn, changeset)
-
-      {:error, :empty_file_error} ->
-        show_flash_message_and_redirects_to_dasboard(
+        show_error_flash_message_and_redirects_to_dasboard(
           conn,
-          :error,
-          gettext("The keyword file is empty!")
+          gettext("The file doesn't look like CSV.")
         )
 
-      {:error, :file_is_too_long_error} ->
-        show_flash_message_and_redirects_to_dasboard(
+      {:error, reason} ->
+        process_validation_error(conn, reason)
+    end
+  end
+
+  defp process_validation_error(conn, reason) do
+    case reason do
+      :empty_file_error ->
+        show_error_flash_message_and_redirects_to_dasboard(
           conn,
-          :error,
-          gettext("The keyword file is too big!")
+          gettext("The file is empty.")
+        )
+
+      :file_is_too_long_error ->
+        show_error_flash_message_and_redirects_to_dasboard(
+          conn,
+          gettext("The file is too big, allowed size is up to %{limit} keywords.",
+            limit: KeywordCSVFile.keywords_limit()
+          )
+        )
+
+      :one_or_more_keywords_are_invalid ->
+        show_error_flash_message_and_redirects_to_dasboard(
+          conn,
+          gettext("One or more keywords are invalid! Allowed keyword length is %{min}-%{max}",
+            min: KeywordCSVFile.keyword_min_length(),
+            max: KeywordCSVFile.keyword_max_length()
+          )
         )
     end
   end
 
-  defp show_flash_message_and_redirects_to_dasboard(conn, flash_type, flash_message) do
+  defp show_error_flash_message_and_redirects_to_dasboard(conn, flash_message) do
     conn
-    |> put_flash(flash_type, flash_message)
+    |> put_flash(:error, flash_message)
     |> redirect(to: Routes.keyword_path(conn, :index))
-  end
-
-  defp show_changeset_errors(conn, changeset) do
-    conn
-    |> put_flash(:error, gettext("The keyword file is invalid CSV file!"))
-    |> put_view(GoogleScrapingWeb.KeywordView)
-    |> render("index.html",
-      changeset: changeset,
-      keywords: Dashboard.list_keywords(conn.assigns.current_user.id)
-    )
   end
 end

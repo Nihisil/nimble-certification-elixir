@@ -37,7 +37,7 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
         |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
       assert get_flash(conn, :info) == nil
-      assert get_flash(conn, :error) == "The keyword file is empty!"
+      assert get_flash(conn, :error) == "The file is empty."
     end
 
     test "given big file, shows validation error", %{conn: conn} do
@@ -50,12 +50,12 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
         |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
       assert get_flash(conn, :info) == nil
-      assert get_flash(conn, :error) == "The keyword file is too big!"
+      assert get_flash(conn, :error) == "The file is too big, allowed size is up to 1000 keywords."
     end
 
-    test "given invalid file, shows validation error", %{conn: conn} do
+    test "given non CSV file, shows validation error", %{conn: conn} do
       user = insert(:user)
-      upload_file = keyword_file_fixture("invalid.txt")
+      upload_file = keyword_file_fixture("non_csv.txt")
 
       conn =
         conn
@@ -63,7 +63,22 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
         |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
       assert get_flash(conn, :info) == nil
-      assert get_flash(conn, :error) == "The keyword file is invalid CSV file!"
+      assert get_flash(conn, :error) == "The file doesn't look like CSV."
+    end
+
+    test "given file with invalid keywords, shows validation error", %{conn: conn} do
+      user = insert(:user)
+      upload_file = keyword_file_fixture("non_valid.csv")
+
+      conn =
+        conn
+        |> log_in_user(user)
+        |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
+
+      assert get_flash(conn, :info) == nil
+
+      assert get_flash(conn, :error) ==
+               "One or more keywords are invalid! Allowed keyword length is 1-100"
     end
   end
 end

@@ -94,21 +94,6 @@ msgid "Log out"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:34
-msgid "The keyword file is empty!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:54
-msgid "The keyword file is invalid CSV file!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:41
-msgid "The keyword file is too big!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 #: lib/google_scraping_web/controllers/keyword_controller.ex:24
 msgid "Keywords were uploaded!"
 msgstr ""
@@ -134,7 +119,7 @@ msgid "User created successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping/dashboard/schemas/keyword_csv_file.ex:42
+#: lib/google_scraping/dashboard/schemas/keyword_csv_file.ex:52
 msgid "file is not valid CSV"
 msgstr ""
 
@@ -146,4 +131,24 @@ msgstr ""
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/index.html.heex:7
 msgid "CSV file:"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/controllers/keyword_controller.ex:30
+msgid "The file doesn't look like CSV."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/controllers/keyword_controller.ex:43
+msgid "The file is empty."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/controllers/keyword_controller.ex:49
+msgid "The file is too big, allowed size is up to %{limit} keywords."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/controllers/keyword_controller.ex:57
+msgid "One or more keywords are invalid! Allowed keyword length is %{min}-%{max}"
 msgstr ""
