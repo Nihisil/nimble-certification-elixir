@@ -5,11 +5,12 @@ defmodule GoogleScrapingWeb.KeywordController do
   alias GoogleScraping.Dashboard.Schemas.KeywordCSVFile
 
   def index(conn, _params) do
+    changeset = KeywordCSVFile.create_changeset(%KeywordCSVFile{})
     keywords = Dashboard.list_keywords(conn.assigns.current_user.id)
-    render(conn, "index.html", keywords: keywords)
+    render(conn, "index.html", keywords: keywords, changeset: changeset)
   end
 
-  def create(conn, %{"keyword_file" => params}) do
+  def create(conn, %{"keyword_csv_file" => params}) do
     changeset = %{
       KeywordCSVFile.create_changeset(%KeywordCSVFile{}, params)
       | action: :validate
@@ -24,10 +25,12 @@ defmodule GoogleScrapingWeb.KeywordController do
       |> redirect(to: Routes.keyword_path(conn, :index))
     else
       %Ecto.Changeset{valid?: false} ->
-        show_flash_message_and_redirects_to_dasboard(
-          conn,
-          :error,
-          "The keyword file is invalid CSV file!"
+        conn
+        |> put_flash(:error, "The keyword file is invalid CSV file!")
+        |> put_view(GoogleScrapingWeb.KeywordView)
+        |> render("index.html",
+          changeset: changeset,
+          keywords: Dashboard.list_keywords(conn.assigns.current_user.id)
         )
 
       {:error, :empty_file_error} ->

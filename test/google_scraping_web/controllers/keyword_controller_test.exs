@@ -5,7 +5,7 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
     test "when given auth user, renders list of keywords page ", %{conn: conn} do
       user = insert(:user)
       conn = conn |> log_in_user(user) |> get(Routes.keyword_path(conn, :index))
-      assert html_response(conn, 200) =~ "Keywords Dashboard"
+      assert html_response(conn, 200) =~ "Keywords"
     end
 
     test "when given NOT auth user, redirects to login page ", %{conn: conn} do
@@ -22,9 +22,8 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
       conn =
         conn
         |> log_in_user(user)
-        |> post(Routes.keyword_path(conn, :create), %{keyword_file: %{file: upload_file}})
+        |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
-      assert redirected_to(conn) == Routes.keyword_path(conn, :index)
       assert get_flash(conn, :info) == "Keywords were uploaded!"
     end
 
@@ -35,9 +34,8 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
       conn =
         conn
         |> log_in_user(user)
-        |> post(Routes.keyword_path(conn, :create), %{keyword_file: %{file: upload_file}})
+        |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
-      assert redirected_to(conn) == Routes.keyword_path(conn, :index)
       assert get_flash(conn, :info) == nil
       assert get_flash(conn, :error) == "The keyword file is empty!"
     end
@@ -49,9 +47,8 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
       conn =
         conn
         |> log_in_user(user)
-        |> post(Routes.keyword_path(conn, :create), %{keyword_file: %{file: upload_file}})
+        |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
-      assert redirected_to(conn) == Routes.keyword_path(conn, :index)
       assert get_flash(conn, :info) == nil
       assert get_flash(conn, :error) == "The keyword file is too big!"
     end
@@ -63,9 +60,8 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
       conn =
         conn
         |> log_in_user(user)
-        |> post(Routes.keyword_path(conn, :create), %{keyword_file: %{file: upload_file}})
+        |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
-      assert redirected_to(conn) == Routes.keyword_path(conn, :index)
       assert get_flash(conn, :info) == nil
       assert get_flash(conn, :error) == "The keyword file is invalid CSV file!"
     end

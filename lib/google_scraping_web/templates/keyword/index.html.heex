@@ -1,1 +1,22 @@
-<h1>Keywords Dashboard</h1>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Keywords</li>
+  </ol>
+</nav>
+
+<h4>Upload CSV file with keywords</h4>
+
+<%= form_for @changeset, Routes.keyword_path(@conn, :create), [method: "post", class: "row pt-2", multipart: true], fn f-> %>
+  <div class="col-3">
+    <%= file_input(f, :file,
+      class: "form-control",
+      required: true,
+      autofocus: true,
+      accept: 'text/csv'
+    ) %>
+  </div>
+  <div class="col-3">
+    <%= submit("Upload", class: "btn btn-primary mb-3") %>
+  </div>
+<% end %>
+Keywords uploaded: <%= length(@keywords) %>
