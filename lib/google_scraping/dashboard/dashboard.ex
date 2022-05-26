@@ -5,21 +5,20 @@ defmodule GoogleScraping.Dashboard do
 
   import Ecto.Query, warn: false
 
-  alias Ecto.Multi
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
 
   @doc """
-  Returns the list of keywords.
+  Returns the list of keywords associated with the given user.
 
   ## Examples
 
-      iex> list_keywords()
+      iex> list_keywords(user_id)
       [%Keyword{}, ...]
 
   """
-  def list_keywords do
-    Repo.all(Keyword)
+  def list_keywords(user_id) do
+    Repo.all(from k in Keyword, where: k.user_id == ^user_id)
   end
 
   @doc """
@@ -43,16 +42,19 @@ defmodule GoogleScraping.Dashboard do
   @doc """
   Creates keywords list.
 
-  TODO start background jobs for each keyword.
   """
   def create_keyword_list(keyword_list, user) do
-    Enum.each(keyword_list, fn keyword ->
-      create_params = %{
+    Enum.each(keyword_list, fn keyword_name ->
+      keyword_params = %{
         user_id: user.id,
-        keyword: keyword
+        name: keyword_name,
+        status: :new
       }
 
-      Multi.run(Multi.new(), :keyword, fn _, _ -> create_keyword(create_params) end)
+      case create_keyword(keyword_params) do
+        # TODO start background jobs for each keyword.
+        {:ok, %Keyword{id: _keyword_id}} -> {:ok}
+      end
     end)
   end
 end

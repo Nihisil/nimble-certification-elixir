@@ -5,7 +5,7 @@ defmodule GoogleScrapingWeb.KeywordController do
   alias GoogleScraping.Dashboard.Schemas.KeywordCSVFile
 
   def index(conn, _params) do
-    keywords = Dashboard.list_keywords()
+    keywords = Dashboard.list_keywords(conn.assigns.current_user.id)
     render(conn, "index.html", keywords: keywords)
   end
 
@@ -18,12 +18,17 @@ defmodule GoogleScrapingWeb.KeywordController do
     with %Ecto.Changeset{valid?: true, changes: %{file: file}} <- changeset,
          {:ok, keyword_list} <- KeywordCSVFile.parse(file.path) do
       Dashboard.create_keyword_list(keyword_list, conn.assigns.current_user)
+
       conn
       |> put_flash(:info, "Keywords were uploaded!")
       |> redirect(to: Routes.keyword_path(conn, :index))
     else
       %Ecto.Changeset{valid?: false} ->
-        show_flash_message_and_redirects_to_dasboard(conn, :error, "The keyword file is invalid CSV file!")
+        show_flash_message_and_redirects_to_dasboard(
+          conn,
+          :error,
+          "The keyword file is invalid CSV file!"
+        )
 
       {:error, :empty_file_error} ->
         show_flash_message_and_redirects_to_dasboard(conn, :error, "The keyword file is empty!")
