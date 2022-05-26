@@ -1,6 +1,8 @@
 defmodule GoogleScrapingWeb.Router do
   use GoogleScrapingWeb, :router
 
+  import GoogleScrapingWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule GoogleScrapingWeb.Router do
     plug :put_root_layout, {GoogleScrapingWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   # coveralls-ignore-start
@@ -60,5 +63,20 @@ defmodule GoogleScrapingWeb.Router do
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  ## Authentication routes
+
+  scope "/", GoogleScrapingWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    resources "/users/register", UserRegistrationController, only: [:new, :create]
+    resources "/users/log_in", UserSessionController, only: [:new, :create]
+  end
+
+  scope "/", GoogleScrapingWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
   end
 end

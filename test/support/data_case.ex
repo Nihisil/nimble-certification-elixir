@@ -27,10 +27,8 @@ defmodule GoogleScraping.DataCase do
       alias GoogleScraping.Repo
 
       import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
-      import GoogleScraping.DataCase
-      import GoogleScraping.Factory
+      import Ecto.{Changeset, Query}
+      import GoogleScraping.{DataCase, Factory}
     end
   end
 

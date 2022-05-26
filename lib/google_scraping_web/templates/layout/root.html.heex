@@ -16,7 +16,7 @@
     </script>
   </head>
   <body>
-    <%= render("_header.html", conn: @conn) %>
+    <%= render("_header.html", assigns) %>
     <%= @inner_content %>
   </body>
 </html>
