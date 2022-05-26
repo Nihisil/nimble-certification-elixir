@@ -5,7 +5,8 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
 
   schema "keywords" do
     field :name, :string
-    field :status, Ecto.Enum, values: [:new, :in_progress, :completed]
+    field :html, :string
+    field :status, Ecto.Enum, values: [:new, :in_progress, :completed, :failed]
 
     belongs_to :user, GoogleScraping.Accounts.Schemas.User
 
@@ -24,7 +25,11 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
     change(keyword, %{status: :in_progress})
   end
 
-  def completed_changeset(keyword) do
-    change(keyword, %{status: :completed})
+  def failed_changeset(keyword) do
+    change(keyword, %{status: :failed})
+  end
+
+  def completed_changeset(keyword, attrs) do
+    change(keyword, Map.merge(attrs, %{status: :completed}))
   end
 end

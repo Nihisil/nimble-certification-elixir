@@ -5,8 +5,9 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   import Ecto.Query, warn: false
 
-  alias GoogleScraping.Dashboard.KeywordScraper
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
+  alias GoogleScraping.Dashboard.KeywordScraperWorker
+  alias GoogleScraping.Dashboard.KeywordScraper
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
 
@@ -73,15 +74,24 @@ defmodule GoogleScraping.Dashboard.Keywords do
   @doc """
   Mark keyword as completed
   """
-  def mark_as_completed(keyword) do
+  def mark_as_completed(keyword, attrs) do
     keyword
-    |> Keyword.completed_changeset()
+    |> Keyword.completed_changeset(attrs)
+    |> Repo.update!()
+  end
+
+  @doc """
+  Mark keyword as failed
+  """
+  def mark_as_failed(keyword) do
+    keyword
+    |> Keyword.failed_changeset()
     |> Repo.update!()
   end
 
   defp create_keyword_background_job(keyword_id) do
     %{"keyword_id" => keyword_id}
-    |> KeywordScraper.new()
+    |> KeywordScraperWorker.new()
     |> Oban.insert()
   end
 end
