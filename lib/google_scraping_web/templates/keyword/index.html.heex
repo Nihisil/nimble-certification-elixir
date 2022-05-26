@@ -11,7 +11,6 @@
     <%= file_input(f, :file,
       class: "form-control",
       required: true,
-      autofocus: true,
       accept: 'text/csv'
     ) %>
   </div>
@@ -19,4 +18,30 @@
     <%= submit("Upload", class: "btn btn-primary mb-3") %>
   </div>
 <% end %>
-Keywords uploaded: <%= length(@keywords) %>
+
+<%= if Enum.empty?(@keywords) do %>
+  <p>Upload CSV files to start.</p>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Keyword</th>
+          <th scope="col">Status</th>
+          <th scope="col">Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for {keyword, i} <- Enum.with_index(@keywords, 1) do %>
+          <tr>
+            <td><%= i %></td>
+            <td><%= keyword.name %></td>
+            <td><%= keyword.status %></td>
+            <td><%= Calendar.strftime(keyword.updated_at, "%Y-%m-%d %H:%M") %> UTC</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
