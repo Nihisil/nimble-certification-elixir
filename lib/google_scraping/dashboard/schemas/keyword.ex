@@ -16,6 +16,7 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
     timestamps()
   end
 
+  @doc false
   def changeset(keyword, attrs) do
     keyword
     |> cast(attrs, [:name, :user_id])
