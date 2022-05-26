@@ -28,7 +28,16 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFile do
   def parse(file_path) do
     case get_keywords_list_from_file(file_path) do
       {:ok, keywords_list} ->
-        validate_keywords_length(keywords_list)
+        case length(keywords_list) do
+          0 ->
+            {:error, :empty_file_error}
+
+          length when length > @keywords_limit ->
+            {:error, :file_is_too_long_error}
+
+          _ ->
+            {:ok, keywords_list}
+        end
 
       {:error, reason} ->
         {:error, reason}
