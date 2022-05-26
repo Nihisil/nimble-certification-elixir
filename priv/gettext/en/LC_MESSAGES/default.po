@@ -109,11 +109,6 @@ msgid "The keyword file is too big!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/keyword/index.html.heex:7
-msgid "Upload CSV file with keyword to proceed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 #: lib/google_scraping_web/controllers/keyword_controller.ex:24
 msgid "Keywords were uploaded!"
 msgstr ""
@@ -146,4 +141,9 @@ msgstr ""
 #, elixir-autogen, elixir-format
 #: lib/google_scraping/account/schemas/user.ex:50
 msgid "must have the @ sign and no spaces"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/index.html.heex:7
+msgid "CSV file:"
 msgstr ""

@@ -4,7 +4,7 @@
   </ol>
 </nav>
 
-<h4><%= gettext("Upload CSV file with keyword to proceed") %></h4>
+<h4><%= gettext("CSV file:") %></h4>
 
 <%= form_for @changeset, Routes.keyword_path(@conn, :create), [method: "post", class: "row pt-2", multipart: true], fn f-> %>
   <div class="col-3">
@@ -20,7 +20,7 @@
 <% end %>
 
 <%= if Enum.empty?(@keywords) do %>
-  <p>Upload CSV files to start.</p>
+  <p><%= "You don't have keywords yet, please upload a CSV file." %></p>
 <% else %>
   <div class="table-responsive">
     <table class="table table-hover">
