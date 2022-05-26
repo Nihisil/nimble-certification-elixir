@@ -5,6 +5,7 @@ defmodule GoogleScraping.Dashboard do
 
   import Ecto.Query, warn: false
 
+  alias GoogleScraping.Dashboard.Queries.KeywordQueries
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
 
@@ -18,7 +19,7 @@ defmodule GoogleScraping.Dashboard do
 
   """
   def list_keywords(user_id) do
-    Repo.all(from k in Keyword, where: k.user_id == ^user_id)
+    Repo.all(KeywordQueries.user_keywords_query(user_id))
   end
 
   @doc """
