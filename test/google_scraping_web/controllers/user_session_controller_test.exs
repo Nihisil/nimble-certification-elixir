@@ -83,6 +83,5 @@ defmodule GoogleScrapingWeb.UserSessionControllerTest do
       assert get_session(conn, :user_token) == nil
       assert get_flash(conn, :info) =~ "Logged out successfully"
     end
-
   end
 end

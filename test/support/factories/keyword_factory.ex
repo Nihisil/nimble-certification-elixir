@@ -3,7 +3,7 @@ defmodule GoogleScraping.KeywordFactory do
 
   defmacro __using__(_opts) do
     quote do
-      @fixture_path "test/support/fixtures"
+      @fixture_path "test/support/fixtures/files"
 
       def keyword_factory do
         user = insert(:user)

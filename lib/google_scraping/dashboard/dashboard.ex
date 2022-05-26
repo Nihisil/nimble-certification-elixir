@@ -5,6 +5,7 @@ defmodule GoogleScraping.Dashboard do
 
   import Ecto.Query, warn: false
 
+  alias Ecto.Multi
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
 
@@ -37,5 +38,21 @@ defmodule GoogleScraping.Dashboard do
     %Keyword{}
     |> Keyword.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Creates keywords list.
+
+  TODO start background jobs for each keyword.
+  """
+  def create_keyword_list(keyword_list, user) do
+    Enum.each(keyword_list, fn keyword ->
+      create_params = %{
+        user_id: user.id,
+        keyword: keyword
+      }
+
+      Multi.run(Multi.new(), :keyword, fn _, _ -> create_keyword(create_params) end)
+    end)
   end
 end
