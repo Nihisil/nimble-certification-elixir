@@ -42,6 +42,7 @@ defmodule GoogleScraping.Dashboard do
   @doc """
   Creates keywords list.
 
+  TODO start background jobs for each keyword.
   """
   def create_keyword_list(keyword_list, user) do
     Enum.each(keyword_list, fn keyword_name ->
@@ -52,7 +53,6 @@ defmodule GoogleScraping.Dashboard do
       }
 
       case create_keyword(keyword_params) do
-        # TODO start background jobs for each keyword.
         {:ok, %Keyword{id: _keyword_id}} -> {:ok}
       end
     end)

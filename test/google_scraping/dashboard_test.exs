@@ -27,7 +27,7 @@ defmodule GoogleScraping.DashboardTest do
     test "given the list of keywords, save keywords to DB with accosicated user" do
       user = insert(:user)
       Dashboard.create_keyword_list(["one", "two"], user)
-      assert Dashboard.list_keywords(user.id) |> length() == 2
+      assert length(Dashboard.list_keywords(user.id)) == 2
     end
   end
 end
