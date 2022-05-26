@@ -2,6 +2,7 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFile do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import GoogleScrapingWeb.Gettext
 
   alias NimbleCSV.RFC4180, as: CSV
 
@@ -38,7 +39,7 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFile do
       if Path.extname(file.filename) == ".csv" && file.content_type == "text/csv" do
         []
       else
-        [file: "file is not valid CSV"]
+        [file: gettext("file is not valid CSV")]
       end
     end)
   end

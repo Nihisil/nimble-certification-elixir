@@ -21,23 +21,25 @@ defmodule GoogleScrapingWeb.KeywordController do
       Dashboard.create_keyword_list(keyword_list, conn.assigns.current_user)
 
       conn
-      |> put_flash(:info, "Keywords were uploaded!")
+      |> put_flash(:info, gettext("Keywords were uploaded!"))
       |> redirect(to: Routes.keyword_path(conn, :index))
     else
       %Ecto.Changeset{valid?: false} ->
-        conn
-        |> put_flash(:error, "The keyword file is invalid CSV file!")
-        |> put_view(GoogleScrapingWeb.KeywordView)
-        |> render("index.html",
-          changeset: changeset,
-          keywords: Dashboard.list_keywords(conn.assigns.current_user.id)
-        )
+        show_changeset_errors(conn, changeset)
 
       {:error, :empty_file_error} ->
-        show_flash_message_and_redirects_to_dasboard(conn, :error, "The keyword file is empty!")
+        show_flash_message_and_redirects_to_dasboard(
+          conn,
+          :error,
+          gettext("The keyword file is empty!")
+        )
 
       {:error, :file_is_too_long_error} ->
-        show_flash_message_and_redirects_to_dasboard(conn, :error, "The keyword file is too big!")
+        show_flash_message_and_redirects_to_dasboard(
+          conn,
+          :error,
+          gettext("The keyword file is too big!")
+        )
     end
   end
 
@@ -45,5 +47,15 @@ defmodule GoogleScrapingWeb.KeywordController do
     conn
     |> put_flash(flash_type, flash_message)
     |> redirect(to: Routes.keyword_path(conn, :index))
+  end
+
+  defp show_changeset_errors(conn, changeset) do
+    conn
+    |> put_flash(:error, gettext("The keyword file is invalid CSV file!"))
+    |> put_view(GoogleScrapingWeb.KeywordView)
+    |> render("index.html",
+      changeset: changeset,
+      keywords: Dashboard.list_keywords(conn.assigns.current_user.id)
+    )
   end
 end

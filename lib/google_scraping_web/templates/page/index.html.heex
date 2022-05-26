@@ -9,12 +9,12 @@
       ) %>
     </p>
     <%= if @current_user do %>
-      <%= link("Proceed to upload keywords",
+      <%= link(gettext("Proceed to upload keywords"),
         to: Routes.keyword_path(@conn, :index),
         class: "btn btn-primary btn-lg"
       ) %>
     <% else %>
-      <%= link("Register to proceed",
+      <%= link(gettext("Register to proceed"),
         to: Routes.user_registration_path(@conn, :new),
         class: "btn btn-primary btn-lg"
       ) %>

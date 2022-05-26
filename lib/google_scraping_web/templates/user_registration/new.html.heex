@@ -10,7 +10,7 @@
   >
     <%= if @changeset.action do %>
       <div class="alert alert-danger">
-        <span>Oops, something went wrong! Please check the errors below.</span>
+        <span><%= gettext("Oops, something went wrong! Please check the errors below.") %></span>
       </div>
     <% end %>
 
@@ -31,10 +31,12 @@
 
     <div class="mb-3 row">
       <div class="col-6">
-        <%= link("Already had an account? Log in", to: Routes.user_session_path(@conn, :new)) %>
+        <%= link(gettext("Already had an account? Log in"),
+          to: Routes.user_session_path(@conn, :new)
+        ) %>
       </div>
       <div class="col-6 text-end">
-        <%= submit("Create account", class: "btn btn-primary") %>
+        <%= submit(gettext("Create account"), class: "btn btn-primary") %>
       </div>
     </div>
   </.form>
