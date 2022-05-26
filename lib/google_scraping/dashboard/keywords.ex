@@ -5,6 +5,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   import Ecto.Query, warn: false
 
+  alias GoogleScraping.Dashboard.KeywordScraper
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
@@ -49,8 +50,38 @@ defmodule GoogleScraping.Dashboard.Keywords do
         status: :new
       }
 
-      # TODO: start background jobs for each created keyword
-      create_keyword(keyword_params)
+      case create_keyword(keyword_params) do
+        {:ok, %Keyword{id: keyword_id}} -> create_keyword_background_job(keyword_id)
+      end
     end)
+  end
+
+  @doc """
+  Gets a single keyword.
+  """
+  def get_keyword_by_id!(id), do: Repo.get!(Keyword, id)
+
+  @doc """
+  Mark keyword as in_progress
+  """
+  def mark_as_in_progress(keyword) do
+    keyword
+    |> Keyword.in_progress_changeset()
+    |> Repo.update!()
+  end
+
+  @doc """
+  Mark keyword as completed
+  """
+  def mark_as_completed(keyword) do
+    keyword
+    |> Keyword.completed_changeset()
+    |> Repo.update!()
+  end
+
+  defp create_keyword_background_job(keyword_id) do
+    %{"keyword_id" => keyword_id}
+    |> KeywordScraper.new()
+    |> Oban.insert()
   end
 end
