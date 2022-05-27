@@ -7,7 +7,7 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordScraperWorkerTest do
   describe "perform/1" do
     test "given keyword, download and store HTML" do
       use_cassette "google/cat" do
-        keyword = insert(:keyword)
+        keyword = insert(:keyword, name: "cat")
 
         Oban.insert(KeywordScraperWorker.new(%{keyword_id: keyword.id}))
 
