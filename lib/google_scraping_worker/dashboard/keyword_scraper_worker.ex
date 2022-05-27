@@ -15,9 +15,14 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorker do
     case KeywordScraper.get_search_page_html_for_keyword(keyword.name) do
       {:ok, html} ->
         Dashboard.mark_as_completed(keyword, %{html: html})
+        :ok
 
-      {:error, _reason} ->
+      {:error, reason} ->
         Dashboard.mark_as_failed(keyword)
+        {:error, reason}
     end
   end
+
+  @impl Oban.Worker
+  def timeout(_job), do: :timer.seconds(10)
 end
