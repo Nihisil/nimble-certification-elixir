@@ -27,7 +27,7 @@ defmodule GoogleScraping.MixProject do
   def application do
     [
       mod: {GoogleScraping.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :httpoison]
     ]
   end
 
