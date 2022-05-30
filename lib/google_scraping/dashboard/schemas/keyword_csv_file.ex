@@ -6,13 +6,13 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFile do
 
   alias NimbleCSV.RFC4180, as: CSV
 
-  embedded_schema do
-    field :file, :map
-  end
-
   @keywords_limit 1000
   @keyword_min_length 1
   @keyword_max_length 100
+
+  embedded_schema do
+    field :file, :map
+  end
 
   def keywords_limit, do: @keywords_limit
   def keyword_min_length, do: @keyword_min_length

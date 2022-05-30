@@ -1,4 +1,4 @@
-defmodule GoogleScraping.AccountsTest do
+defmodule GoogleScraping.Account.AccountsTest do
   use GoogleScraping.DataCase
 
   alias GoogleScraping.Accounts

@@ -34,25 +34,25 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFileTest do
     test "given valid keywords file, returns the keywords list" do
       %{path: file_path} = keyword_file_fixture("valid.csv")
 
-      assert {:ok, ["one", "two", "three"]} = KeywordCSVFile.parse(file_path)
+      assert KeywordCSVFile.parse(file_path) == {:ok, ["one", "two", "three"]}
     end
 
     test "given an empty keywords file, returns error" do
       %{path: file_path} = keyword_file_fixture("empty.csv")
 
-      assert {:error, :empty_file_error} = KeywordCSVFile.parse(file_path)
+      assert KeywordCSVFile.parse(file_path) == {:error, :empty_file_error}
     end
 
     test "given an big keywords file, returns error" do
       %{path: file_path} = keyword_file_fixture("big.csv")
 
-      assert {:error, :file_is_too_long_error} = KeywordCSVFile.parse(file_path)
+      assert KeywordCSVFile.parse(file_path) == {:error, :file_is_too_long_error}
     end
 
     test "given an file with invalid keywords, returns error" do
       %{path: file_path} = keyword_file_fixture("non_valid.csv")
 
-      assert {:error, :one_or_more_keywords_are_invalid} = KeywordCSVFile.parse(file_path)
+      assert KeywordCSVFile.parse(file_path) == {:error, :one_or_more_keywords_are_invalid}
     end
   end
 end
