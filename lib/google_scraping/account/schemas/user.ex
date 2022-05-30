@@ -4,6 +4,8 @@ defmodule GoogleScraping.Accounts.Schemas.User do
   import Ecto.Changeset
   import GoogleScrapingWeb.Gettext
 
+  @email_regex ~r/^[^\s]+@[^\s]+$/
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
@@ -46,9 +48,7 @@ defmodule GoogleScraping.Accounts.Schemas.User do
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
-      message: gettext("must have the @ sign and no spaces")
-    )
+    |> validate_format(:email, @email_regex, message: gettext("must have the @ sign and no spaces"))
     |> validate_length(:email, max: 160)
     |> unsafe_validate_unique(:email, GoogleScraping.Repo)
     |> unique_constraint(:email)

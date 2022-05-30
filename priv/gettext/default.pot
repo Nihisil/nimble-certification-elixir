@@ -123,7 +123,7 @@ msgid "file is not valid CSV"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping/account/schemas/user.ex:50
+#: lib/google_scraping/account/schemas/user.ex:51
 msgid "must have the @ sign and no spaces"
 msgstr ""
 
