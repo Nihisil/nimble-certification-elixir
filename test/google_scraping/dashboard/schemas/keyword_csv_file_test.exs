@@ -58,7 +58,7 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFileTest do
     test "given an file with invalid keywords, returns error" do
       %{path: file_path} = keyword_file_fixture("non_valid.csv")
 
-      assert {:error, :one_or_more_keywords_are_invalid} = KeywordCSVFile.parse(file_path)
+      assert KeywordCSVFile.parse(file_path) == {:error, :one_or_more_keywords_are_invalid}
     end
   end
 end
