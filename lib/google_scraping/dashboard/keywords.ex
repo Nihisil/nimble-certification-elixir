@@ -41,8 +41,6 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   @doc """
   Creates keywords list.
-
-  TODO start background jobs for each keyword.
   """
   def create_keyword_list(keyword_list, user) do
     Enum.each(keyword_list, fn keyword_name ->
@@ -52,6 +50,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
         status: :new
       }
 
+      # TODO: start background jobs for each created keyword
       Multi.new()
       |> Multi.run(:keyword, fn _, _ -> create_keyword(keyword_params) end)
       |> Repo.transaction()
