@@ -5,11 +5,13 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
     test "when given auth user, renders list of keywords page ", %{conn: conn} do
       user = insert(:user)
       conn = conn |> log_in_user(user) |> get(Routes.keyword_path(conn, :index))
+
       assert html_response(conn, 200) =~ "Keywords"
     end
 
     test "when given NOT auth user, redirects to login page ", %{conn: conn} do
       conn = get(conn, Routes.keyword_path(conn, :index))
+
       assert html_response(conn, 302) =~ "/log_in"
     end
   end

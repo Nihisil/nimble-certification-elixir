@@ -7,6 +7,7 @@ defmodule GoogleScraping.Account.AccountsTest do
   describe "get_user_by_email/1" do
     test "when the email exists, returns the user" do
       %{id: id} = user = insert(:user)
+
       assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
     end
 
@@ -142,6 +143,7 @@ defmodule GoogleScraping.Account.AccountsTest do
 
     test "when expired token, does not return user", %{token: token} do
       {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
+
       assert Accounts.get_user_by_session_token(token) == nil
     end
   end
@@ -150,6 +152,7 @@ defmodule GoogleScraping.Account.AccountsTest do
     test "deletes the token" do
       user = insert(:user)
       token = Accounts.generate_user_session_token(user)
+
       assert Accounts.delete_session_token(token) == :ok
       assert Accounts.get_user_by_session_token(token) == nil
     end

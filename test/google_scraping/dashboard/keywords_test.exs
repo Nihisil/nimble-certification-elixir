@@ -10,6 +10,7 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
       keyword = insert(:keyword, user_id: user.id)
       # keyword for another user
       insert(:keyword)
+
       assert Keywords.list_keywords(user.id) == [keyword]
     end
   end
@@ -32,6 +33,7 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
     test "given the list of keywords, save keywords to DB with accosicated user" do
       user = insert(:user)
       Keywords.create_keyword_list(["one", "two"], user)
+
       assert length(Keywords.list_keywords(user.id)) == 2
     end
   end

@@ -18,6 +18,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
   describe "log_in_user/3" do
     test "when log in, stores the user token in the session", %{conn: conn, user: user} do
       conn = UserAuth.log_in_user(conn, user)
+
       assert token = get_session(conn, :user_token)
       assert get_session(conn, :live_socket_id) == "users_sessions:#{Base.url_encode64(token)}"
       assert redirected_to(conn) == "/"
@@ -29,18 +30,20 @@ defmodule GoogleScrapingWeb.UserAuthTest do
       user: user
     } do
       conn = conn |> put_session(:to_be_removed, "value") |> UserAuth.log_in_user(user)
+
       assert get_session(conn, :to_be_removed) == nil
     end
 
     test "when log in, redirects to the configured path", %{conn: conn, user: user} do
       conn = conn |> put_session(:user_return_to, "/hello") |> UserAuth.log_in_user(user)
+
       assert redirected_to(conn) == "/hello"
     end
 
     test "when remember_me is configured, writes a cookie", %{conn: conn, user: user} do
       conn = conn |> fetch_cookies() |> UserAuth.log_in_user(user, %{"remember_me" => "true"})
-      assert get_session(conn, :user_token) == conn.cookies[@remember_me_cookie]
 
+      assert get_session(conn, :user_token) == conn.cookies[@remember_me_cookie]
       assert %{value: signed_token, max_age: max_age} = conn.resp_cookies[@remember_me_cookie]
       assert signed_token != get_session(conn, :user_token)
       assert max_age == 5_184_000
@@ -78,6 +81,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
 
     test "when logout, works even if user is already logged out", %{conn: conn} do
       conn = conn |> fetch_cookies() |> UserAuth.log_out_user()
+
       assert get_session(conn, :user_token) == nil
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
       assert redirected_to(conn) == "/"
@@ -88,6 +92,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
     test "with session, authenticates user", %{conn: conn, user: user} do
       user_token = Accounts.generate_user_session_token(user)
       conn = conn |> put_session(:user_token, user_token) |> UserAuth.fetch_current_user([])
+
       assert conn.assigns.current_user.id == user.id
     end
 
@@ -110,6 +115,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
     test "with missing data, does not authenticate", %{conn: conn, user: user} do
       _ = Accounts.generate_user_session_token(user)
       conn = UserAuth.fetch_current_user(conn, [])
+
       assert get_session(conn, :user_token) == nil
       assert conn.assigns.current_user == nil
     end
@@ -118,12 +124,14 @@ defmodule GoogleScrapingWeb.UserAuthTest do
   describe "redirect_if_user_is_authenticated/2" do
     test "when user is authenticated, redirects to home page", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.redirect_if_user_is_authenticated([])
+
       assert conn.halted
       assert redirected_to(conn) == "/"
     end
 
     test "when user is not authenticated, does not redirect", %{conn: conn} do
       conn = UserAuth.redirect_if_user_is_authenticated(conn, [])
+
       assert conn.halted == false
       assert conn.status == nil
     end
@@ -132,6 +140,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
   describe "require_authenticated_user/2" do
     test "when user is not authenticated, redirects", %{conn: conn} do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
+
       assert conn.halted
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
       assert get_flash(conn, :error) == "You must log in to access this page."
@@ -165,6 +174,7 @@ defmodule GoogleScrapingWeb.UserAuthTest do
 
     test "when user is authenticated, does not redirect", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.require_authenticated_user([])
+
       assert conn.halted == false
       assert conn.status == nil
     end
