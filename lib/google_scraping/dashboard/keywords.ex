@@ -7,6 +7,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.KeywordScraperWorker
+  alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.KeywordScraper
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
