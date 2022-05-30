@@ -6,5 +6,5 @@ defmodule GoogleScraping.Dashboard.Queries.KeywordQuery do
   @doc """
   Returns the keywords list for the given user_id
   """
-  def user_keywords_query(user_id), do: from(k in Keyword, where: k.user_id == ^user_id)
+  def user_keywords_query(user_id), do: where(Keyword, [k], k.user_id == ^user_id)
 end

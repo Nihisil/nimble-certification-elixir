@@ -18,9 +18,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
       [%Keyword{}, ...]
 
   """
-  def list_keywords(user_id) do
-    Repo.all(KeywordQuery.user_keywords_query(user_id))
-  end
+  def list_keywords(user_id), do: Repo.all(KeywordQuery.user_keywords_query(user_id))
 
   @doc """
   Creates a keyword.
