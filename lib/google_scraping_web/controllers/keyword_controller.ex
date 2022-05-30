@@ -1,12 +1,12 @@
 defmodule GoogleScrapingWeb.KeywordController do
   use GoogleScrapingWeb, :controller
 
-  alias GoogleScraping.Dashboard
+  alias GoogleScraping.Dashboard.Keywords
   alias GoogleScraping.Dashboard.Schemas.KeywordCSVFile
 
   def index(conn, _params) do
     changeset = KeywordCSVFile.create_changeset(%KeywordCSVFile{})
-    keywords = Dashboard.list_keywords(conn.assigns.current_user.id)
+    keywords = Keywords.list_keywords(conn.assigns.current_user.id)
     render(conn, "index.html", keywords: keywords, changeset: changeset)
   end
 
@@ -18,7 +18,7 @@ defmodule GoogleScrapingWeb.KeywordController do
 
     with %Ecto.Changeset{valid?: true, changes: %{file: file}} <- changeset,
          {:ok, keyword_list} <- KeywordCSVFile.parse(file.path) do
-      Dashboard.create_keyword_list(keyword_list, conn.assigns.current_user)
+      Keywords.create_keyword_list(keyword_list, conn.assigns.current_user)
 
       conn
       |> put_flash(:info, gettext("Keywords were uploaded!"))

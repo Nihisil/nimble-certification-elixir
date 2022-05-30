@@ -1,4 +1,4 @@
-defmodule GoogleScraping.Dashboard.Queries.KeywordQueries do
+defmodule GoogleScraping.Dashboard.Queries.KeywordQuery do
   import Ecto.Query
 
   alias GoogleScraping.Dashboard.Schemas.Keyword

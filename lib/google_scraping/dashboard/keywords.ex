@@ -1,11 +1,11 @@
-defmodule GoogleScraping.Dashboard do
+defmodule GoogleScraping.Dashboard.Keywords do
   @moduledoc """
-  The Dashboard context.
+  The Keywords context.
   """
 
   import Ecto.Query, warn: false
 
-  alias GoogleScraping.Dashboard.Queries.KeywordQueries
+  alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
 
@@ -19,7 +19,7 @@ defmodule GoogleScraping.Dashboard do
 
   """
   def list_keywords(user_id) do
-    Repo.all(KeywordQueries.user_keywords_query(user_id))
+    Repo.all(KeywordQuery.user_keywords_query(user_id))
   end
 
   @doc """
