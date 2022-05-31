@@ -3,6 +3,9 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
 
   import Ecto.Changeset
 
+  @keyword_min_length 1
+  @keyword_max_length 100
+
   schema "keywords" do
     field :name, :string
     field :html, :string
@@ -18,6 +21,7 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
     |> cast(attrs, [:name, :user_id])
     |> put_change(:status, :new)
     |> validate_required([:name, :user_id])
+    |> validate_length(:name, min: @keyword_min_length, max: @keyword_max_length)
     |> assoc_constraint(:user)
   end
 
@@ -26,4 +30,7 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
 
   def completed_changeset(keyword, attrs),
     do: change(keyword, Map.merge(attrs, %{status: :completed}))
+
+  def keyword_min_length, do: @keyword_min_length
+  def keyword_max_length, do: @keyword_max_length
 end

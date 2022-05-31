@@ -2,7 +2,7 @@ defmodule GoogleScrapingWeb.KeywordController do
   use GoogleScrapingWeb, :controller
 
   alias GoogleScraping.Dashboard.Keywords
-  alias GoogleScraping.Dashboard.Schemas.KeywordCSVFile
+  alias GoogleScraping.Dashboard.Schemas.{Keyword, KeywordCSVFile}
 
   def index(conn, _params) do
     changeset = KeywordCSVFile.create_changeset(%KeywordCSVFile{})
@@ -56,8 +56,8 @@ defmodule GoogleScrapingWeb.KeywordController do
         show_error_flash_message_and_redirects_to_dasboard(
           conn,
           gettext("One or more keywords are invalid! Allowed keyword length is %{min}-%{max}",
-            min: KeywordCSVFile.keyword_min_length(),
-            max: KeywordCSVFile.keyword_max_length()
+            min: Keyword.keyword_min_length(),
+            max: Keyword.keyword_max_length()
           )
         )
     end

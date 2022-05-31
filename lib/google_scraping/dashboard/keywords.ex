@@ -45,15 +45,24 @@ defmodule GoogleScraping.Dashboard.Keywords do
   Creates keywords list.
   """
   def create_keyword_list(keyword_list, user) do
-    Enum.each(keyword_list, fn keyword_name ->
-      keyword_params = %{
-        user_id: user.id,
-        name: keyword_name,
-        status: :new
-      }
+    keywords_data =
+      Enum.map(keyword_list, fn keyword_name ->
+        %{
+          user_id: user.id,
+          name: keyword_name,
+          status: :new
+        }
+      end)
 
-      case create_keyword(keyword_params) do
-        {:ok, %Keyword{id: keyword_id}} -> create_keyword_background_job(keyword_id)
+    Repo.transaction(fn ->
+      try do
+        keyword_ids = validate_and_create_keywords_list(keywords_data)
+
+        Enum.each(keyword_ids, fn keyword_id ->
+          create_keyword_background_job(keyword_id)
+        end)
+      catch
+        :error -> Repo.rollback(:invalid_keywords)
       end
     end)
   end
@@ -94,5 +103,15 @@ defmodule GoogleScraping.Dashboard.Keywords do
     %{"keyword_id" => keyword_id}
     |> KeywordScraperWorker.new()
     |> Oban.insert()
+  end
+
+  defp validate_and_create_keywords_list(keywords_data) do
+    Enum.map(keywords_data, fn keyword_attrs ->
+      case create_keyword(keyword_attrs) do
+        {:ok, %Keyword{id: keyword_id}} -> keyword_id
+        # if one of the keywords is invalid, raise an error
+        {:error, _} -> throw(:error)
+      end
+    end)
   end
 end
