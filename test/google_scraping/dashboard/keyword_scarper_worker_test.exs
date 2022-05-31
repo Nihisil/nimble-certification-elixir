@@ -9,8 +9,8 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorkerTest do
         keyword = insert(:keyword, name: "cat")
 
         Oban.insert(KeywordScraperWorker.new(%{keyword_id: keyword.id}))
-
         updated_keyword = Keywords.get_keyword_by_id!(keyword.id)
+
         assert updated_keyword.status == :completed
         assert updated_keyword.html != nil
       end
@@ -22,8 +22,8 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorkerTest do
       keyword = insert(:keyword)
 
       Oban.insert(KeywordScraperWorker.new(%{keyword_id: keyword.id}))
-
       updated_keyword = Keywords.get_keyword_by_id!(keyword.id)
+
       assert updated_keyword.status == :failed
     end
   end

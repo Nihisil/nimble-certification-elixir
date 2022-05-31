@@ -7,6 +7,7 @@ defmodule GoogleScraping.Dashboard.KeywordScraperTest do
     test "given keyword, returns HTML search result" do
       use_cassette "google/cat" do
         {:ok, response} = KeywordScraper.get_search_page_html_for_keyword("cat")
+
         assert response != nil
       end
     end
