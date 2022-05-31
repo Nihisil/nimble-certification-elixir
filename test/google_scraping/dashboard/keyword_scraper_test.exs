@@ -1,4 +1,4 @@
-defmodule GoogleScraping.Dashboard.Schemas.KeywordScraperTest do
+defmodule GoogleScraping.Dashboard.KeywordScraperTest do
   use GoogleScraping.DataCase, async: true
 
   alias GoogleScraping.Dashboard.KeywordScraper

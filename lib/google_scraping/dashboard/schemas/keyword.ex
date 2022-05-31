@@ -21,15 +21,9 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
     |> assoc_constraint(:user)
   end
 
-  def in_progress_changeset(keyword) do
-    change(keyword, %{status: :in_progress})
-  end
+  def in_progress_changeset(keyword), do: change(keyword, %{status: :in_progress})
+  def failed_changeset(keyword), do: change(keyword, %{status: :failed})
 
-  def failed_changeset(keyword) do
-    change(keyword, %{status: :failed})
-  end
-
-  def completed_changeset(keyword, attrs) do
-    change(keyword, Map.merge(attrs, %{status: :completed}))
-  end
+  def completed_changeset(keyword, attrs),
+    do: change(keyword, Map.merge(attrs, %{status: :completed}))
 end

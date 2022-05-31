@@ -1,8 +1,7 @@
-defmodule GoogleScraping.Dashboard.Schemas.KeywordScraperWorkerTest do
+defmodule GoogleScraping.Dashboard.KeywordScraperWorkerTest do
   use GoogleScraping.DataCase, async: true
 
-  alias GoogleScraping.Dashboard
-  alias GoogleScraping.Dashboard.KeywordScraperWorker
+  alias GoogleScraping.Dashboard.{Keywords, KeywordScraperWorker}
 
   describe "perform/1" do
     test "given keyword, download and store HTML" do
@@ -11,7 +10,7 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordScraperWorkerTest do
 
         Oban.insert(KeywordScraperWorker.new(%{keyword_id: keyword.id}))
 
-        updated_keyword = Dashboard.get_keyword_by_id!(keyword.id)
+        updated_keyword = Keywords.get_keyword_by_id!(keyword.id)
         assert updated_keyword.status == :completed
         assert updated_keyword.html != nil
       end
@@ -24,7 +23,7 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordScraperWorkerTest do
 
       Oban.insert(KeywordScraperWorker.new(%{keyword_id: keyword.id}))
 
-      updated_keyword = Dashboard.get_keyword_by_id!(keyword.id)
+      updated_keyword = Keywords.get_keyword_by_id!(keyword.id)
       assert updated_keyword.status == :failed
     end
   end
