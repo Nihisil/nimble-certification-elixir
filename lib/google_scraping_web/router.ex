@@ -65,8 +65,6 @@ defmodule GoogleScrapingWeb.Router do
     end
   end
 
-  ## Authentication routes
-
   scope "/", GoogleScrapingWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
@@ -75,8 +73,9 @@ defmodule GoogleScrapingWeb.Router do
   end
 
   scope "/", GoogleScrapingWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :require_authenticated_user]
 
     delete "/users/log_out", UserSessionController, :delete
+    resources "/keywords", KeywordController, only: [:index, :create]
   end
 end
