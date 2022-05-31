@@ -5,7 +5,6 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   import Ecto.Query, warn: false
 
-  alias Ecto.Multi
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
@@ -51,9 +50,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
       }
 
       # TODO: start background jobs for each created keyword
-      Multi.new()
-      |> Multi.run(:keyword, fn _, _ -> create_keyword(keyword_params) end)
-      |> Repo.transaction()
+      create_keyword(keyword_params)
     end)
   end
 end
