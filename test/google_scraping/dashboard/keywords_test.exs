@@ -13,6 +13,14 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
 
       assert Keywords.list_keywords(user.id) == [keyword]
     end
+
+    test "given search phrase, returns filtered queryset" do
+      user = insert(:user)
+      insert(:keyword, name: "cat", user_id: user.id)
+      second_keyword = insert(:keyword, name: "dog", user_id: user.id)
+
+      assert Keywords.list_keywords(user.id, %{"query" => "og"}) == [second_keyword]
+    end
   end
 
   describe "create_keyword/1" do
