@@ -31,6 +31,6 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
   def completed_changeset(keyword, attrs),
     do: change(keyword, Map.merge(attrs, %{status: :completed}))
 
-  def keyword_min_length, do: @keyword_min_length
-  def keyword_max_length, do: @keyword_max_length
+  def min_length, do: @keyword_min_length
+  def max_length, do: @keyword_max_length
 end

@@ -52,8 +52,8 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFile do
       |> List.flatten()
 
     validate_keyword_length_fn = fn element ->
-      String.length(element) < Keyword.keyword_min_length() or
-        String.length(element) > Keyword.keyword_max_length()
+      String.length(element) < Keyword.min_length() or
+        String.length(element) > Keyword.max_length()
     end
 
     case Enum.any?(keywords, validate_keyword_length_fn) do
