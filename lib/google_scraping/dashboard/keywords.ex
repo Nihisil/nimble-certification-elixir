@@ -5,6 +5,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   import Ecto.Query, warn: false
 
+  alias GoogleScraping.Accounts.Schemas.User
   alias GoogleScraping.Dashboard.KeywordScraperWorker
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.Schemas.Keyword
@@ -42,15 +43,8 @@ defmodule GoogleScraping.Dashboard.Keywords do
   @doc """
   Creates keywords list.
   """
-  def create_keyword_list(keyword_list, user) do
-    keywords_data =
-      Enum.map(keyword_list, fn keyword_name ->
-        %{
-          user_id: user.id,
-          name: keyword_name,
-          status: :new
-        }
-      end)
+  def create_keyword_list(keyword_list, %User{id: user_id} = _user) do
+    keywords_data = build_keywords_data(keyword_list, user_id)
 
     Repo.transaction(fn ->
       try do
@@ -111,6 +105,16 @@ defmodule GoogleScraping.Dashboard.Keywords do
         # if one of the keywords is invalid, raise an error
         {:error, changeset} -> throw({:error, changeset})
       end
+    end)
+  end
+
+  defp build_keywords_data(keyword_list, user_id) do
+    Enum.map(keyword_list, fn keyword_name ->
+      %{
+        user_id: user_id,
+        name: keyword_name,
+        status: :new
+      }
     end)
   end
 end

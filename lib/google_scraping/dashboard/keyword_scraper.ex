@@ -6,15 +6,18 @@ defmodule GoogleScraping.Dashboard.KeywordScraper do
   Returns the HTML of the Google search page for the given keyword.
   """
   def get_search_page_html_for_keyword(keyword) do
-    url =
-      @base_url
-      |> URI.parse()
-      |> Map.put(:query, URI.encode_query(q: keyword, hl: "en"))
-      |> URI.to_string()
+    url = build_url(keyword)
 
     case HTTPoison.get(url, "User-Agent": @user_agent) do
       {:ok, %{status_code: 200, body: body}} -> {:ok, body}
       {:error, %{reason: reason}} -> {:error, reason}
     end
+  end
+
+  defp build_url(keyword) do
+    @base_url
+    |> URI.parse()
+    |> Map.put(:query, URI.encode_query(q: keyword, hl: "en"))
+    |> URI.to_string()
   end
 end
