@@ -74,7 +74,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
   @doc """
   Mark keyword as in_progress
   """
-  def mark_as_in_progress(keyword) do
+  def mark_as_in_progress!(keyword) do
     keyword
     |> Keyword.in_progress_changeset()
     |> Repo.update!()
@@ -83,7 +83,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
   @doc """
   Mark keyword as completed
   """
-  def mark_as_completed(keyword, attrs) do
+  def mark_as_completed!(keyword, attrs) do
     keyword
     |> Keyword.completed_changeset(attrs)
     |> Repo.update!()
@@ -92,7 +92,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
   @doc """
   Mark keyword as failed
   """
-  def mark_as_failed(keyword) do
+  def mark_as_failed!(keyword) do
     keyword
     |> Keyword.failed_changeset()
     |> Repo.update!()
