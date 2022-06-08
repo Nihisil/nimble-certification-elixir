@@ -11,5 +11,13 @@ defmodule GoogleScraping.Dashboard.KeywordScraperTest do
         assert response != nil
       end
     end
+
+    test "given error for keyword search, returns errror" do
+      expect(HTTPoison, :get, fn _, _ -> {:error, %{reason: :error}} end)
+
+      {:error, reason} = KeywordScraper.get_search_page_html_for_keyword("cat")
+
+      assert reason != nil
+    end
   end
 end

@@ -12,12 +12,12 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorkerTest do
         updated_keyword = Keywords.get_keyword_by_id!(keyword.id)
 
         assert updated_keyword.status == :completed
-        assert updated_keyword.html != nil
+        assert is_binary(updated_keyword.html)
       end
     end
 
     test "given error for keyword search, fails job" do
-      stub(HTTPoison, :get, fn _, _ -> {:error, %{reason: :error}} end)
+      expect(HTTPoison, :get, fn _, _ -> {:error, %{reason: :error}} end)
 
       keyword = insert(:keyword)
 
