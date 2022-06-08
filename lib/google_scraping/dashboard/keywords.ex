@@ -5,10 +5,8 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   import Ecto.Query, warn: false
 
-  alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.KeywordScraperWorker
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
-  alias GoogleScraping.Dashboard.KeywordScraper
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
 
