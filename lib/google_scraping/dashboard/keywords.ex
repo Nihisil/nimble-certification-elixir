@@ -60,7 +60,8 @@ defmodule GoogleScraping.Dashboard.Keywords do
           create_keyword_background_job(keyword_id)
         end)
       catch
-        :error -> Repo.rollback(:invalid_keywords)
+        # TODO: log error
+        {:error, _error_changeset} -> Repo.rollback(:invalid_keywords)
       end
     end)
   end
@@ -108,7 +109,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
       case create_keyword(keyword_attrs) do
         {:ok, %Keyword{id: keyword_id}} -> keyword_id
         # if one of the keywords is invalid, raise an error
-        {:error, _} -> throw(:error)
+        {:error, changeset} -> throw({:error, changeset})
       end
     end)
   end
