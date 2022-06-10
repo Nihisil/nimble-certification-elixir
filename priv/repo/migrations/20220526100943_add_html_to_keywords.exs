@@ -1,4 +1,4 @@
-defmodule GoogleScraping.Repo.Migrations.AddHtmlTokeywords do
+defmodule GoogleScraping.Repo.Migrations.AddHtmlToKeywords do
   use Ecto.Migration
 
   def change do

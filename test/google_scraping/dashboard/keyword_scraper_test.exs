@@ -8,16 +8,14 @@ defmodule GoogleScraping.Dashboard.KeywordScraperTest do
       use_cassette "google/cat" do
         {:ok, response} = KeywordScraper.get_search_page_html_for_keyword("cat")
 
-        assert response != nil
+        assert is_binary(response) == true
       end
     end
 
     test "given error for keyword search, returns errror" do
-      expect(HTTPoison, :get, fn _, _ -> {:error, %{reason: :error}} end)
+      expect(HTTPoison, :get, fn _, _ -> {:error, %{reason: :timeout}} end)
 
-      {:error, reason} = KeywordScraper.get_search_page_html_for_keyword("cat")
-
-      assert reason != nil
+      assert KeywordScraper.get_search_page_html_for_keyword("cat") == {:error, :timeout}
     end
   end
 end
