@@ -18,15 +18,17 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
 
   describe "POST create/2" do
     test "given valid file, creates keywords", %{conn: conn} do
-      user = insert(:user)
-      upload_file = keyword_file_fixture("valid.csv")
+      use_cassette "google/valid_file" do
+        user = insert(:user)
+        upload_file = keyword_file_fixture("valid.csv")
 
-      conn =
-        conn
-        |> log_in_user(user)
-        |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
+        conn =
+          conn
+          |> log_in_user(user)
+          |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
-      assert get_flash(conn, :info) == "Keywords were uploaded!"
+        assert get_flash(conn, :info) == "Keywords were uploaded!"
+      end
     end
 
     test "given empty file, shows validation error", %{conn: conn} do

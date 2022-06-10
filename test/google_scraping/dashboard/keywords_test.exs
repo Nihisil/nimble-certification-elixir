@@ -31,10 +31,19 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
 
   describe "create_keyword_list/2" do
     test "given the list of keywords, save keywords to DB with accosicated user" do
-      user = insert(:user)
-      Keywords.create_keyword_list(["one", "two"], user)
+      use_cassette "google/valid_file" do
+        user = insert(:user)
+        Keywords.create_keyword_list(["one", "two", "three"], user)
 
-      assert length(Keywords.list_keywords(user.id)) == 2
+        assert length(Keywords.list_keywords(user.id)) == 3
+      end
+    end
+
+    test "given the list of keywords with invalid keyword, doesn't save keywords" do
+      user = insert(:user)
+      Keywords.create_keyword_list(["one", "", "three"], user)
+
+      assert Keywords.list_keywords(user.id) == []
     end
   end
 end

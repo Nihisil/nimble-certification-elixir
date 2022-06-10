@@ -37,7 +37,7 @@ config :google_scraping, GoogleScraping.Mailer, adapter: Swoosh.Adapters.Test
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-config :google_scraping, Oban, crontab: false, queues: false, plugins: false
+config :google_scraping, Oban, testing: :inline
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

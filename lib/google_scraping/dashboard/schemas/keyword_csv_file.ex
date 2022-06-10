@@ -4,19 +4,17 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFile do
   import Ecto.Changeset
   import GoogleScrapingWeb.Gettext
 
+  alias GoogleScraping.Dashboard.Schemas.Keyword
+
   alias NimbleCSV.RFC4180, as: CSV
 
   @keywords_limit 1000
-  @keyword_min_length 1
-  @keyword_max_length 100
 
   embedded_schema do
     field :file, :map
   end
 
   def keywords_limit, do: @keywords_limit
-  def keyword_min_length, do: @keyword_min_length
-  def keyword_max_length, do: @keyword_max_length
 
   def create_changeset(keyword_file, attrs \\ %{}) do
     keyword_file
@@ -54,8 +52,8 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordCSVFile do
       |> List.flatten()
 
     validate_keyword_length_fn = fn element ->
-      String.length(element) < @keyword_min_length or
-        String.length(element) > @keyword_max_length
+      String.length(element) < Keyword.min_length() or
+        String.length(element) > Keyword.max_length()
     end
 
     case Enum.any?(keywords, validate_keyword_length_fn) do

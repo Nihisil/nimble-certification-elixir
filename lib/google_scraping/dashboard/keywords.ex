@@ -5,6 +5,8 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   import Ecto.Query, warn: false
 
+  alias GoogleScraping.Accounts.Schemas.User
+  alias GoogleScraping.Dashboard.KeywordScraperWorker
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
   alias GoogleScraping.Dashboard.Schemas.Keyword
   alias GoogleScraping.Repo
@@ -41,16 +43,78 @@ defmodule GoogleScraping.Dashboard.Keywords do
   @doc """
   Creates keywords list.
   """
-  def create_keyword_list(keyword_list, user) do
-    Enum.each(keyword_list, fn keyword_name ->
-      keyword_params = %{
-        user_id: user.id,
+  def create_keyword_list(keyword_list, %User{id: user_id} = _user) do
+    keywords_data = build_keywords_data(keyword_list, user_id)
+
+    Repo.transaction(fn ->
+      try do
+        keyword_ids = validate_and_create_keywords_list(keywords_data)
+
+        Enum.each(keyword_ids, fn keyword_id ->
+          create_keyword_background_job(keyword_id)
+        end)
+      catch
+        # TODO: log error
+        {:error, _error_changeset} -> Repo.rollback(:invalid_keywords)
+      end
+    end)
+  end
+
+  @doc """
+  Gets a single keyword.
+  """
+  def get_keyword_by_id!(id), do: Repo.get!(Keyword, id)
+
+  @doc """
+  Mark keyword as in_progress
+  """
+  def mark_as_in_progress!(keyword) do
+    keyword
+    |> Keyword.in_progress_changeset()
+    |> Repo.update!()
+  end
+
+  @doc """
+  Mark keyword as completed
+  """
+  def mark_as_completed!(keyword, attrs) do
+    keyword
+    |> Keyword.completed_changeset(attrs)
+    |> Repo.update!()
+  end
+
+  @doc """
+  Mark keyword as failed
+  """
+  def mark_as_failed!(keyword) do
+    keyword
+    |> Keyword.failed_changeset()
+    |> Repo.update!()
+  end
+
+  defp create_keyword_background_job(keyword_id) do
+    %{"keyword_id" => keyword_id}
+    |> KeywordScraperWorker.new()
+    |> Oban.insert()
+  end
+
+  defp validate_and_create_keywords_list(keywords_data) do
+    Enum.map(keywords_data, fn keyword_attrs ->
+      case create_keyword(keyword_attrs) do
+        {:ok, %Keyword{id: keyword_id}} -> keyword_id
+        # if one of the keywords is invalid, raise an error
+        {:error, changeset} -> throw({:error, changeset})
+      end
+    end)
+  end
+
+  defp build_keywords_data(keyword_list, user_id) do
+    Enum.map(keyword_list, fn keyword_name ->
+      %{
+        user_id: user_id,
         name: keyword_name,
         status: :new
       }
-
-      # TODO: start background jobs for each created keyword
-      create_keyword(keyword_params)
     end)
   end
 end

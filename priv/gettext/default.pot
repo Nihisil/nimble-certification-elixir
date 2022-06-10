@@ -118,7 +118,7 @@ msgid "User created successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping/dashboard/schemas/keyword_csv_file.ex:43
+#: lib/google_scraping/dashboard/schemas/keyword_csv_file.ex:41
 msgid "file is not valid CSV"
 msgstr ""
 
