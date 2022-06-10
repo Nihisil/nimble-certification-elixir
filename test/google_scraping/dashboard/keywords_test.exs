@@ -4,14 +4,20 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
   alias GoogleScraping.Dashboard.Keywords
   alias GoogleScraping.Dashboard.Schemas.Keyword
 
-  describe "list_keywords/1" do
+  describe "list_keywords/2" do
     test "given a user ID, returns all the user's keywords" do
       user = insert(:user)
       keyword = insert(:keyword, user_id: user.id)
-      # keyword for another user
-      insert(:keyword)
+      _another_user_keyword = insert(:keyword)
 
-      assert Keywords.list_keywords(user.id) == [keyword]
+      assert Keywords.list_keywords(keyword.user_id, nil) == [keyword]
+    end
+
+    test "with provided search phrase, returns filtered queryset" do
+      user = insert(:user)
+      _cat_keyword = insert(:keyword, name: "cat", user_id: user.id)
+      dog_keyword = insert(:keyword, name: "dog", user_id: user.id)
+      assert Keywords.list_keywords(user.id, %{"query" => "og"}) == [dog_keyword]
     end
   end
 
