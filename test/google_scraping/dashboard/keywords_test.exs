@@ -17,6 +17,7 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
       user = insert(:user)
       _cat_keyword = insert(:keyword, name: "cat", user_id: user.id)
       dog_keyword = insert(:keyword, name: "dog", user_id: user.id)
+
       assert Keywords.list_keywords(user.id, %{"query" => "og"}) == [dog_keyword]
     end
   end
