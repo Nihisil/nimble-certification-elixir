@@ -8,6 +8,9 @@ defmodule GoogleScraping.Dashboard.Queries.KeywordQuery do
   """
   def user_keywords(user_id, search_phrase \\ nil) do
     wildcard_search = "%#{search_phrase}%"
-    Keyword |> where([k], k.user_id == ^user_id) |> where([k], ilike(k.name, ^wildcard_search))
+
+    Keyword
+    |> where([k], k.user_id == ^user_id)
+    |> where([k], ilike(k.name, ^wildcard_search))
   end
 end

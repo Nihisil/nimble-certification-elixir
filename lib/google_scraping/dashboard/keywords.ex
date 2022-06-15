@@ -24,7 +24,10 @@ defmodule GoogleScraping.Dashboard.Keywords do
   """
   def list_keywords(user_id, params \\ %{}) do
     search_phrase = get_in(params, ["query"])
-    Repo.all(KeywordQuery.user_keywords(user_id, search_phrase))
+
+    user_id
+    |> KeywordQuery.user_keywords(search_phrase)
+    |> Repo.all()
   end
 
   @doc """
