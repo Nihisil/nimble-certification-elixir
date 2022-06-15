@@ -6,5 +6,11 @@ defmodule GoogleScraping.Dashboard.Queries.KeywordQuery do
   @doc """
   Returns the keywords list for the given user_id
   """
-  def user_keywords_query(user_id), do: where(Keyword, [k], k.user_id == ^user_id)
+  def user_keywords(user_id, search_phrase \\ nil) do
+    wildcard_search = "%#{search_phrase}%"
+
+    Keyword
+    |> where([k], k.user_id == ^user_id)
+    |> where([k], ilike(k.name, ^wildcard_search))
+  end
 end
