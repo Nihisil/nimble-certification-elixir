@@ -52,7 +52,7 @@ msgid "Keep me logged in for 60 days"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/keyword/index.html.heex:30
+#: lib/google_scraping_web/templates/keyword/index.html.heex:53
 msgid "Keyword"
 msgstr ""
 
@@ -73,12 +73,12 @@ msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/keyword/index.html.heex:31
+#: lib/google_scraping_web/templates/keyword/index.html.heex:54
 msgid "Status"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/keyword/index.html.heex:32
+#: lib/google_scraping_web/templates/keyword/index.html.heex:55
 msgid "Updated"
 msgstr ""
 
@@ -150,4 +150,29 @@ msgstr ""
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/controllers/keyword_controller.ex:58
 msgid "One or more keywords are invalid! Allowed keyword length is %{min}-%{max}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/index.html.heex:25
+msgid "Nothing matched the search query '%{query}', you may want to try another one."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/index.html.heex:44
+msgid "Search"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/index.html.heex:42
+msgid "Search by keyword"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/index.html.heex:35
+msgid "You don't have keywords yet, please upload a CSV file."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/index.html.heex:30
+msgid "or visit index page"
 msgstr ""
