@@ -20,8 +20,31 @@
 <% end %>
 
 <%= if Enum.empty?(@keywords) do %>
-  <p><%= "You don't have keywords yet, please upload a CSV file." %></p>
+  <%= if get_in(@params, ["query"]) do %>
+    <p>
+      <%= gettext("Nothing matched the search query '%{query}', you may want to try another one.",
+        query: get_in(@params, ["query"])
+      ) %>
+    </p>
+    <p>
+      <%= link(gettext("or visit index page"),
+        to: Routes.keyword_path(@conn, :index)
+      ) %>
+    </p>
+  <% else %>
+    <p><%= gettext("You don't have keywords yet, please upload a CSV file.") %></p>
+  <% end %>
 <% else %>
+  <%= form_for @conn, Routes.keyword_path(@conn, :index), [class: "form-inline", method: "get"], fn f-> %>
+    <div class="input-group">
+      <%= text_input(f, :query,
+        class: "form-control mb-2 mr-sm-2",
+        placeholder: gettext("Search by keyword")
+      ) %>
+      <%= submit(gettext("Search"), class: "btn btn-primary mb-2") %>
+    </div>
+  <% end %>
+
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
