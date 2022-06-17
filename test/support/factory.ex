@@ -1,5 +1,5 @@
 defmodule GoogleScraping.Factory do
   use ExMachina.Ecto, repo: GoogleScraping.Repo
 
-  use GoogleScraping.UserFactory
+  use GoogleScraping.{UserFactory, KeywordFactory}
 end

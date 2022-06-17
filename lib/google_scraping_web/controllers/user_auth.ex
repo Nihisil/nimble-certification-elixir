@@ -1,4 +1,6 @@
 defmodule GoogleScrapingWeb.UserAuth do
+  use GoogleScrapingWeb, :controller
+
   import Plug.Conn
   import Phoenix.Controller
 
@@ -89,7 +91,7 @@ defmodule GoogleScrapingWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, gettext("You must log in to access this page."))
       |> maybe_store_return_to()
       |> redirect(to: Routes.user_session_path(conn, :new))
       |> halt()

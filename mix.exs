@@ -27,7 +27,7 @@ defmodule GoogleScraping.MixProject do
   def application do
     [
       mod: {GoogleScraping.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :httpoison]
     ]
   end
 
@@ -52,8 +52,10 @@ defmodule GoogleScraping.MixProject do
       {:faker, "~> 0.17.0", [only: [:dev, :test], runtime: false]},
       {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.18"},
+      {:httpoison, "~> 1.8.1"},
       {:jason, "~> 1.2"},
       {:mimic, "~> 1.7.2", [only: :test]},
+      {:nimble_csv, "~> 1.2.0"},
       {:nimble_template, "~> 4.1", only: :dev, runtime: false},
       {:oban, "~> 2.12.0"},
       {:phoenix, "~> 1.6.6"},

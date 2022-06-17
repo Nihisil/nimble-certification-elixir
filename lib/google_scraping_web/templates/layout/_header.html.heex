@@ -16,7 +16,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li>
-              <%= link("Log out",
+              <%= link(gettext("Log out"),
                 to: Routes.user_session_path(@conn, :delete),
                 method: :delete,
                 class: "nav-link"
@@ -26,7 +26,7 @@
         </div>
       <% else %>
         <li>
-          <%= link("Log in",
+          <%= link(gettext("Log in"),
             to: Routes.user_session_path(@conn, :new),
             class: "btn btn-outline-primary"
           ) %>
