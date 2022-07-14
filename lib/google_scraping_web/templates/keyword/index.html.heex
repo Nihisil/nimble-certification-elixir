@@ -68,5 +68,10 @@
         <% end %>
       </tbody>
     </table>
+
+    <%= render(GoogleScrapingWeb.PaginationView, "pagination.html",
+      conn: @conn,
+      pagination: @pagination
+    ) %>
   </div>
 <% end %>

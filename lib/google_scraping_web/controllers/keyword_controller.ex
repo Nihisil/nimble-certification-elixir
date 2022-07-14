@@ -6,9 +6,16 @@ defmodule GoogleScrapingWeb.KeywordController do
 
   def index(conn, params) do
     changeset = KeywordCSVFile.create_changeset(%KeywordCSVFile{})
-    keywords = Keywords.list_keywords(conn.assigns.current_user.id, params)
 
-    render(conn, "index.html", keywords: keywords, changeset: changeset, params: params)
+    {keywords, pagination} =
+      Keywords.list_paginated_user_keywords(conn.assigns.current_user.id, params)
+
+    render(conn, "index.html",
+      keywords: keywords,
+      changeset: changeset,
+      params: params,
+      pagination: pagination
+    )
   end
 
   def create(conn, %{"keyword_csv_file" => params}) do
