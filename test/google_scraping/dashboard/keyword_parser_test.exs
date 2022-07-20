@@ -17,7 +17,7 @@ defmodule GoogleScraping.Dashboard.KeywordParserTest do
                  total_urls_count: 76,
                  non_ad_results_count: 9,
                  non_ad_results_urls_count: 9
-               } = parsed_results
+               } == parsed_results
       end
     end
   end
