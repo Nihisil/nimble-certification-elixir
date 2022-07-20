@@ -4,7 +4,6 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorkerTest do
   alias GoogleScraping.Dashboard.{Keywords, KeywordScraperWorker}
 
   describe "perform/1" do
-    @tag :wip
     test "given keyword, download and store HTML" do
       use_cassette "google/crawl_success" do
         keyword = insert(:keyword, name: "buy car")

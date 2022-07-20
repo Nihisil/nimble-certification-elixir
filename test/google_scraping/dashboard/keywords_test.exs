@@ -4,13 +4,15 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
   alias GoogleScraping.Dashboard.Keywords
   alias GoogleScraping.Dashboard.Schemas.Keyword
 
-  describe "list_keywords/2" do
+  describe "list_paginated_user_keywords/2" do
     test "given a user ID, returns all the user's keywords" do
       user = insert(:user)
       keyword = insert(:keyword, user_id: user.id)
       _another_user_keyword = insert(:keyword)
 
-      assert Keywords.list_keywords(keyword.user_id, nil) == [keyword]
+      {keywords, _pagination} = Keywords.list_paginated_user_keywords(keyword.user_id, %{})
+
+      assert keywords == [keyword]
     end
 
     test "with provided search phrase, returns filtered queryset" do
@@ -18,7 +20,9 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
       _cat_keyword = insert(:keyword, name: "cat", user_id: user.id)
       dog_keyword = insert(:keyword, name: "dog", user_id: user.id)
 
-      assert Keywords.list_keywords(user.id, %{"query" => "og"}) == [dog_keyword]
+      {keywords, _pagination} = Keywords.list_paginated_user_keywords(user.id, %{"query" => "og"})
+
+      assert keywords == [dog_keyword]
     end
   end
 
@@ -42,7 +46,9 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
         user = insert(:user)
         Keywords.create_keyword_list(["one", "two", "three"], user)
 
-        assert length(Keywords.list_keywords(user.id)) == 3
+        {keywords, _pagination} = Keywords.list_paginated_user_keywords(user.id)
+
+        assert length(keywords) == 3
       end
     end
 
@@ -50,7 +56,9 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
       user = insert(:user)
       Keywords.create_keyword_list(["one", "", "three"], user)
 
-      assert Keywords.list_keywords(user.id) == []
+      {keywords, _pagination} = Keywords.list_paginated_user_keywords(user.id)
+
+      assert keywords == []
     end
   end
 
