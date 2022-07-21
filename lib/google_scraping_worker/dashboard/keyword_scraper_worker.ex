@@ -4,7 +4,7 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorker do
     max_attempts: 3,
     unique: [period: 60]
 
-  alias GoogleScraping.Dashboard.{Keywords, KeywordScraper}
+  alias GoogleScraping.Dashboard.{KeywordParser, Keywords, KeywordScraper}
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"keyword_id" => keyword_id}}) do
@@ -13,7 +13,9 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorker do
 
     case KeywordScraper.get_search_page_html_for_keyword(keyword.name) do
       {:ok, html} ->
-        Keywords.mark_as_completed!(keyword, %{html: html})
+        {:ok, parsed_results} = KeywordParser.parse(html)
+        parsed_results = Map.put(parsed_results, :html, html)
+        Keywords.mark_as_completed!(keyword, parsed_results)
         :ok
 
       {:error, reason} ->

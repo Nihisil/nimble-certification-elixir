@@ -50,7 +50,7 @@ defmodule GoogleScraping.MixProject do
       {:excoveralls, "~> 0.14.4", [only: :test]},
       {:exvcr, "~> 0.13.3", [only: :test]},
       {:faker, "~> 0.17.0", [only: [:dev, :test], runtime: false]},
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.30.0"},
       {:gettext, "~> 0.18"},
       {:httpoison, "~> 1.8.1"},
       {:jason, "~> 1.2"},
