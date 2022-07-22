@@ -59,6 +59,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/index.html.heex:3
+#: lib/google_scraping_web/templates/keyword/show.html.heex:4
 msgid "Keywords"
 msgstr ""
 
@@ -75,6 +76,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/index.html.heex:54
+#: lib/google_scraping_web/templates/keyword/show.html.heex:20
 msgid "Status"
 msgstr ""
 
@@ -176,4 +178,44 @@ msgstr ""
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/index.html.heex:30
 msgid "or visit index page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:59
+msgid "Click to see rendered HTML"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:9
+msgid "Keyword '%{name}' details"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:24
+msgid "Number of AdWords advertisers in the top position"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:36
+msgid "Number of the non-AdWords results on the page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:28
+msgid "The total number of AdWords advertisers on the page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:44
+msgid "The total number of links (all of them) on the page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:32
+msgid "URLs of the AdWords advertisers in the top position"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:40
+msgid "URLs of the non-AdWords results on the page"
 msgstr ""
