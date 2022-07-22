@@ -139,17 +139,17 @@ msgid "The file doesn't look like CSV."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:44
+#: lib/google_scraping_web/controllers/keyword_controller.ex:49
 msgid "The file is empty."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:50
+#: lib/google_scraping_web/controllers/keyword_controller.ex:55
 msgid "The file is too big, allowed size is up to %{limit} keywords."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:58
+#: lib/google_scraping_web/controllers/keyword_controller.ex:63
 msgid "One or more keywords are invalid! Allowed keyword length is %{min}-%{max}"
 msgstr ""
 
