@@ -90,7 +90,11 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
     test "when given auth user and keyword, renders keywords details page", %{conn: conn} do
       user = insert(:user)
       keyword = insert(:keyword, user_id: user.id, name: "test keyword")
-      conn = conn |> log_in_user(user) |> get(Routes.keyword_path(conn, :show, keyword))
+
+      conn =
+        conn
+        |> log_in_user(user)
+        |> get(Routes.keyword_path(conn, :show, keyword))
 
       assert html_response(conn, 200) =~ keyword.name
     end
