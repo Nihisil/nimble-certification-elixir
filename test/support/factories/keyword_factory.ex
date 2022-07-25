@@ -1,5 +1,5 @@
 defmodule GoogleScraping.KeywordFactory do
-  alias GoogleScraping.Dashboard.Schemas.Keyword
+  alias GoogleScraping.Dashboard.Schemas.{Keyword, KeywordUrl}
 
   defmacro __using__(_opts) do
     quote do
@@ -12,6 +12,17 @@ defmodule GoogleScraping.KeywordFactory do
           name: Faker.Lorem.word(),
           user_id: user.id,
           status: :new
+        }
+      end
+
+      def keyword_url_factory do
+        user = insert(:user)
+        keyword = insert(:keyword, user_id: user.id)
+
+        %KeywordUrl{
+          url: Faker.Lorem.word(),
+          user_id: user.id,
+          keyword_id: keyword.id
         }
       end
 

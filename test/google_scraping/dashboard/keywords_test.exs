@@ -26,6 +26,42 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
     end
   end
 
+  describe "apply_filters_to_user_keywords/2" do
+    test "with provided url_contains filter, returns count of urls" do
+      user = insert(:user)
+      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/technology")
+      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/some-technology")
+      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc")
+
+      assert Keywords.apply_filters_to_user_keywords(user.id, %{
+               url_contains: "tech"
+             }) == 2
+    end
+
+    test "with provided url_exact filter, returns count of urls" do
+      user = insert(:user)
+      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/technology")
+      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc")
+      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc")
+
+      assert Keywords.apply_filters_to_user_keywords(user.id, %{
+               url_exact: "https://test.com/abc"
+             }) == 2
+    end
+
+    test "with provided url_stat filter, returns count of urls" do
+      # How many keywords have URLs in stored search results with 2 or more “/” or 1 or more “>”.
+      user = insert(:user)
+      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/technology")
+      _url = insert(:keyword_url, user_id: user.id, url: "test.com/abc>")
+      _url = insert(:keyword_url, user_id: user.id, url: "test.com/abc")
+
+      assert Keywords.apply_filters_to_user_keywords(user.id, %{
+               url_stat: true
+             }) == 2
+    end
+  end
+
   describe "create_keyword/1" do
     test "with valid data, creates a keyword" do
       user = insert(:user)

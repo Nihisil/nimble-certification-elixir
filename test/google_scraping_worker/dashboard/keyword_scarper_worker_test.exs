@@ -19,6 +19,10 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorkerTest do
         assert updated_keyword.non_ad_results_count == 9
         assert updated_keyword.non_ad_results_urls_count == 9
         assert is_binary(updated_keyword.html)
+
+        keyword_urls = Keywords.user_keyword_urls(keyword.user_id)
+
+        assert length(keyword_urls) == updated_keyword.total_urls_count
       end
     end
 

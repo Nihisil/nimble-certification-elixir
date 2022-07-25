@@ -15,7 +15,12 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorker do
       {:ok, html} ->
         {:ok, parsed_results} = KeywordParser.parse(html)
         parsed_results = Map.put(parsed_results, :html, html)
-        Keywords.mark_as_completed!(keyword, parsed_results)
+
+        {urls, keyword_attrs} = Map.pop(parsed_results, :urls)
+
+        Keywords.mark_as_completed!(keyword, keyword_attrs)
+        Keywords.store_keyword_urls(keyword, urls)
+
         :ok
 
       {:error, reason} ->

@@ -5,7 +5,7 @@ defmodule GoogleScraping.Dashboard.KeywordParser do
     ad_total_count: ".x2VHCd.OSrXXb.qzEoUe",
     non_ad_results_count: ".yuRUbf",
     non_ad_results_urls_count: ".yuRUbf > a",
-    total_urls_count: "a[href]"
+    all_urls: "a[href]"
   }
 
   def parse(html) do
@@ -17,7 +17,8 @@ defmodule GoogleScraping.Dashboard.KeywordParser do
       ad_total_count: ad_total_count(document),
       non_ad_results_count: non_ad_results_count(document),
       non_ad_results_urls_count: non_ad_results_urls_count(document),
-      total_urls_count: total_urls_count(document)
+      total_urls_count: total_urls_count(document),
+      urls: list_of_urls(document)
     }
 
     {:ok, attributes}
@@ -55,7 +56,13 @@ defmodule GoogleScraping.Dashboard.KeywordParser do
 
   defp total_urls_count(document) do
     document
-    |> Floki.find(@selectors.total_urls_count)
+    |> Floki.find(@selectors.all_urls)
     |> Enum.count()
+  end
+
+  defp list_of_urls(document) do
+    document
+    |> Floki.find(@selectors.all_urls)
+    |> Floki.attribute("href")
   end
 end
