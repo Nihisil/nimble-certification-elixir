@@ -4,9 +4,15 @@ defmodule GoogleScrapingWeb.KeywordFiltersControllerTest do
   describe "GET index/2" do
     test "when given filter, renders results count", %{conn: conn} do
       user = insert(:user)
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/technology")
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/some-technology")
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc")
+
+      _ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/technology", is_ad: true)
+
+      _ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/some-technology", is_ad: true)
+
+      _non_ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/technology", is_ad: false)
 
       conn =
         conn
