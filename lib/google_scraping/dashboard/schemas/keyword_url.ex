@@ -5,12 +5,14 @@ defmodule GoogleScraping.Dashboard.Schemas.KeywordUrl do
 
   @fields [
     :url,
+    :is_ad,
     :user_id,
     :keyword_id
   ]
 
   schema "keyword_urls" do
     field :url, :string
+    field :is_ad, :boolean
 
     belongs_to :user, GoogleScraping.Accounts.Schemas.User
     belongs_to :keyword, GoogleScraping.Dashboard.Schemas.Keyword

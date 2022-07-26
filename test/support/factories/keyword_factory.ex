@@ -22,7 +22,8 @@ defmodule GoogleScraping.KeywordFactory do
         %KeywordUrl{
           url: Faker.Lorem.word(),
           user_id: user.id,
-          keyword_id: keyword.id
+          keyword_id: keyword.id,
+          is_ad: false
         }
       end
 

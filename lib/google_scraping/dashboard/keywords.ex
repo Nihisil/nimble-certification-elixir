@@ -30,9 +30,9 @@ defmodule GoogleScraping.Dashboard.Keywords do
     |> Repo.paginate(params)
   end
 
-  def user_keyword_urls(user_id) do
+  def user_keyword_urls(user_id, is_ad) do
     user_id
-    |> KeywordQuery.user_keyword_urls()
+    |> KeywordQuery.user_keyword_urls(is_ad)
     |> Repo.all()
   end
 
@@ -109,11 +109,11 @@ defmodule GoogleScraping.Dashboard.Keywords do
     |> Repo.update!()
   end
 
-  def store_keyword_urls(keyword, urls) do
+  def store_keyword_urls(keyword, urls, is_ad) do
     keyword_urls =
       urls
       |> Enum.map(fn url ->
-        %{user_id: keyword.user_id, keyword_id: keyword.id, url: url}
+        %{user_id: keyword.user_id, keyword_id: keyword.id, url: url, is_ad: is_ad}
       end)
       |> Enum.map(fn params ->
         params

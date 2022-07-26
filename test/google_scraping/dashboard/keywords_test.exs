@@ -29,9 +29,15 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
   describe "apply_filters_to_user_keywords/2" do
     test "with provided url_contains filter, returns count of urls" do
       user = insert(:user)
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/technology")
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/some-technology")
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc")
+
+      _ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/technology", is_ad: true)
+
+      _ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/some-technology", is_ad: true)
+
+      _non_ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/technology", is_ad: false)
 
       assert Keywords.apply_filters_to_user_keywords(user.id, %{
                url_contains: "tech"
@@ -40,9 +46,13 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
 
     test "with provided url_exact filter, returns count of urls" do
       user = insert(:user)
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/technology")
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc")
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc")
+      _ad_url = insert(:keyword_url, user_id: user.id, url: "https://test.com/abc", is_ad: true)
+
+      _non_ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/abc", is_ad: false)
+
+      _non_ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/abc", is_ad: false)
 
       assert Keywords.apply_filters_to_user_keywords(user.id, %{
                url_exact: "https://test.com/abc"
@@ -52,9 +62,11 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
     test "with provided url_stat filter, returns count of urls" do
       # How many keywords have URLs in stored search results with 2 or more “/” or 1 or more “>”.
       user = insert(:user)
-      _url = insert(:keyword_url, user_id: user.id, url: "https://test.com/technology")
-      _url = insert(:keyword_url, user_id: user.id, url: "test.com/abc>")
-      _url = insert(:keyword_url, user_id: user.id, url: "test.com/abc")
+      _ad_url = insert(:keyword_url, user_id: user.id, url: "test.com/abc>", is_ad: true)
+      _non_ad_url = insert(:keyword_url, user_id: user.id, url: "test.com/abc>", is_ad: false)
+
+      _non_ad_url =
+        insert(:keyword_url, user_id: user.id, url: "https://test.com/abc", is_ad: false)
 
       assert Keywords.apply_filters_to_user_keywords(user.id, %{
                url_stat: true
