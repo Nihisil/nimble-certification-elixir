@@ -15,6 +15,8 @@ config :google_scraping, GoogleScraping.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
+secret_key = "RTNFXEPjzFKFc31iMrQeu/lMEn5RYyaMMTsid/M+08PJoTZ7cK4erN40UdjkH+Oh"
+
 config :google_scraping, GoogleScrapingWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
@@ -22,7 +24,7 @@ config :google_scraping, GoogleScrapingWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "RTNFXEPjzFKFc31iMrQeu/lMEn5RYyaMMTsid/M+08PJoTZ7cK4erN40UdjkH+Oh",
+  secret_key_base: secret_key,
   watchers: [
     sass: {
       DartSass,
@@ -32,6 +34,8 @@ config :google_scraping, GoogleScrapingWeb.Endpoint,
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
   ]
+
+config :google_scraping, GoogleScraping.Account.Guardian, secret_key: secret_key
 
 # ## SSL Support
 #

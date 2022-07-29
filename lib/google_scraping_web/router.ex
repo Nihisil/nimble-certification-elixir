@@ -79,4 +79,12 @@ defmodule GoogleScrapingWeb.Router do
     resources "/keywords", KeywordController, only: [:index, :create, :show]
     resources "/keyword/filters", KeywordFiltersController, only: [:index]
   end
+
+  scope "/api/v1", GoogleScrapingWeb.Api.V1, as: :api do
+    pipe_through [
+      :api
+    ]
+
+    post "/sign-in", AuthController, :create
+  end
 end

@@ -68,6 +68,13 @@ config :google_scraping, Oban,
     keyword_scraper: 10
   ]
 
+config :jsonapi,
+  remove_links: true,
+  json_library: Jason,
+  paginator: nil
+
+config :google_scraping, GoogleScraping.Account.Guardian, issuer: "google_scraping"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
