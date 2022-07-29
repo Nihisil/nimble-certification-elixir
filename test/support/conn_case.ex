@@ -18,6 +18,7 @@ defmodule GoogleScrapingWeb.ConnCase do
   use ExUnit.CaseTemplate
 
   alias Ecto.Adapters.SQL.Sandbox
+  alias GoogleScraping.Account.Guardian
 
   using do
     quote do
@@ -55,5 +56,9 @@ defmodule GoogleScrapingWeb.ConnCase do
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
     |> Plug.Conn.put_session(:user_token, token)
+  end
+
+  def token_auth_user(%Plug.Conn{} = conn, user) do
+    Guardian.Plug.sign_in(conn, user)
   end
 end
