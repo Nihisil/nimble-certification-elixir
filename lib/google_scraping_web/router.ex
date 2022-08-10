@@ -105,6 +105,7 @@ defmodule GoogleScrapingWeb.Router do
       :token_auth
     ]
 
+    get "/keywords", KeywordController, :index
     post "/keywords/upload-file", UploadKeywordController, :create
   end
 end

@@ -88,7 +88,6 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
              json_response(conn, 400)
   end
 
-  @tag :wip
   test "given a no file, returns 400 status with error details", %{conn: conn} do
     user = insert(:user)
 
