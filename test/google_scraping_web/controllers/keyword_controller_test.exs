@@ -2,14 +2,14 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
   use GoogleScrapingWeb.ConnCase
 
   describe "GET index/2" do
-    test "when given auth user, renders list of keywords page ", %{conn: conn} do
+    test "when given auth user, renders list of keywords page", %{conn: conn} do
       user = insert(:user)
       conn = conn |> log_in_user(user) |> get(Routes.keyword_path(conn, :index))
 
       assert html_response(conn, 200) =~ "Keywords"
     end
 
-    test "when given NOT auth user, redirects to login page ", %{conn: conn} do
+    test "when given NOT auth user, redirects to login page", %{conn: conn} do
       conn = get(conn, Routes.keyword_path(conn, :index))
 
       assert html_response(conn, 302) =~ "/log_in"
@@ -83,6 +83,37 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
 
       assert get_flash(conn, :error) ==
                "One or more keywords are invalid! Allowed keyword length is 1-100"
+    end
+  end
+
+  describe "GET show/2" do
+    test "when given auth user and keyword, renders keywords details page", %{conn: conn} do
+      user = insert(:user)
+      keyword = insert(:keyword, user_id: user.id, name: "test keyword")
+
+      conn =
+        conn
+        |> log_in_user(user)
+        |> get(Routes.keyword_path(conn, :show, keyword))
+
+      assert html_response(conn, 200) =~ keyword.name
+    end
+
+    test "when given NOT auth user, redirects to login page", %{conn: conn} do
+      keyword = insert(:keyword)
+      conn = get(conn, Routes.keyword_path(conn, :show, keyword))
+
+      assert html_response(conn, 302) =~ "/log_in"
+    end
+
+    test "when given another user keyword, shows not found error", %{conn: conn} do
+      another_user = insert(:user)
+      keyword = insert(:keyword, user_id: another_user.id)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        user = insert(:user)
+        conn |> log_in_user(user) |> get(Routes.keyword_path(conn, :show, keyword))
+      end
     end
   end
 end

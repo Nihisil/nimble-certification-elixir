@@ -68,6 +68,9 @@ defmodule GoogleScraping.Dashboard.Keywords do
     end)
   end
 
+  def get_user_keyword_by_id!(%User{id: user_id}, keyword_id),
+    do: Repo.get_by!(Keyword, id: keyword_id, user_id: user_id)
+
   @doc """
   Gets a single keyword.
   """
