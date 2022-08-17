@@ -1,3 +1,73 @@
-<h2>Keywords details <%= @keyword.name %></h2>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <%= link(gettext("Keywords"),
+        to: Routes.keyword_path(@conn, :index)
+      ) %>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      <%= gettext("Keyword '%{name}' details", %{name: @keyword.name}) %>
+    </li>
+  </ol>
+</nav>
 
-<p>Coming soon!</p>
+<div class="card">
+  <div class="card-header text-center">
+    <h2><%= @keyword.name %></h2>
+  </div>
+  <div class="card-body">
+    <dl class="row">
+      <dt class="offset-sm-3 col-lg-5"><%= gettext("Status") %></dt>
+      <dd class="col-lg-4"><%= @keyword.status %></dd>
+      <%= if is_completed(@keyword) do %>
+        <dt class="offset-sm-3 col-lg-5">
+          <%= gettext("Number of AdWords advertisers in the top position") %>
+        </dt>
+        <dd class="col-lg-4"><%= @keyword.ad_top_count %></dd>
+        <dt class="offset-sm-3 col-lg-5">
+          <%= gettext("The total number of AdWords advertisers on the page") %>
+        </dt>
+        <dd class="col-lg-4"><%= @keyword.ad_total_count %></dd>
+        <dt class="offset-sm-3 col-lg-5">
+          <%= gettext("Number of AdWords advertiser's URLs in the top position") %>
+        </dt>
+        <dd class="col-lg-4"><%= @keyword.ad_top_urls_count %></dd>
+        <dt class="offset-sm-3 col-lg-5">
+          <%= gettext("Number of the non-AdWords results on the page") %>
+        </dt>
+        <dd class="col-lg-4"><%= @keyword.non_ad_results_count %></dd>
+        <dt class="offset-sm-3 col-lg-5">
+          <%= gettext("Number of non-AdWords advertiser's URLs") %>
+        </dt>
+        <dd class="col-lg-4"><%= @keyword.non_ad_results_urls_count %></dd>
+        <dt class="offset-sm-3 col-lg-5">
+          <%= gettext("The total number of links (all of them) on the page") %>
+        </dt>
+        <dd class="col-lg-4"><%= @keyword.total_urls_count %></dd>
+      <% end %>
+    </dl>
+    <%= if is_completed(@keyword) do %>
+      <p>
+        <button
+          class="btn btn-primary"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseHTML"
+          aria-expanded="false"
+          aria-controls="collapseHTML"
+        >
+          <%= gettext("Click to see rendered HTML") %>
+        </button>
+      </p>
+      <div>
+        <div class="collapse collapse-horizontal" id="collapseHTML">
+          <iframe {%{srcdoc: @keyword.html}} title="Search results" height="600px" width="100%">
+          </iframe>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer text-muted text-center">
+    <%= Calendar.strftime(@keyword.updated_at, "%Y-%m-%d %H:%M") %>
+  </div>
+</div>
