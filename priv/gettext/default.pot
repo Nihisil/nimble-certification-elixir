@@ -211,10 +211,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/show.html.heex:32
-msgid "URLs of the AdWords advertisers in the top position"
+msgid "Number of AdWords advertiser's URLs in the top position"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/show.html.heex:40
-msgid "URLs of the non-AdWords results on the page"
+msgid "Number of non-AdWords advertiser's URLs"
 msgstr ""
