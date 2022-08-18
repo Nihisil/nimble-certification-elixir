@@ -16,18 +16,18 @@ defmodule GoogleScraping.Dashboard.Keywords do
 
   ## Examples
 
-      iex> list_keywords(user_id, nil)
+      iex> list_paginated_user_keywords(user_id, nil)
       [%Keyword{}, ...]
 
-      iex> list_keywords(user_id, %{"query" => "dog"})
+      iex> list_paginated_user_keywords(user_id, %{"query" => "dog"})
       [%Keyword{}, ...]
   """
-  def list_keywords(user_id, params \\ %{}) do
+  def list_paginated_user_keywords(user_id, params \\ %{}) do
     search_phrase = get_in(params, ["query"])
 
     user_id
     |> KeywordQuery.user_keywords(search_phrase)
-    |> Repo.all()
+    |> Repo.paginate(params)
   end
 
   @doc """

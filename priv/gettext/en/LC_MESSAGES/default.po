@@ -96,7 +96,7 @@ msgid "Log out"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:25
+#: lib/google_scraping_web/controllers/keyword_controller.ex:32
 msgid "Keywords were uploaded!"
 msgstr ""
 
@@ -136,22 +136,22 @@ msgid "CSV file:"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:31
+#: lib/google_scraping_web/controllers/keyword_controller.ex:38
 msgid "The file doesn't look like CSV."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:49
+#: lib/google_scraping_web/controllers/keyword_controller.ex:56
 msgid "The file is empty."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:55
+#: lib/google_scraping_web/controllers/keyword_controller.ex:62
 msgid "The file is too big, allowed size is up to %{limit} keywords."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:63
+#: lib/google_scraping_web/controllers/keyword_controller.ex:70
 msgid "One or more keywords are invalid! Allowed keyword length is %{min}-%{max}"
 msgstr ""
 
@@ -218,4 +218,14 @@ msgstr ""
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/show.html.heex:40
 msgid "Number of non-AdWords advertiser's URLs"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/pagination/pagination.html.heex:4
+msgid "First"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/pagination/pagination.html.heex:12
+msgid "Last"
 msgstr ""

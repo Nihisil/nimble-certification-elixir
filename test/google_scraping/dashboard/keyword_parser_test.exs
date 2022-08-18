@@ -10,14 +10,14 @@ defmodule GoogleScraping.Dashboard.KeywordParserTest do
 
         assert {:ok, parsed_results} = KeywordParser.parse(response)
 
-        assert %{
+        assert parsed_results == %{
                  ad_top_count: 1,
                  ad_top_urls_count: 1,
                  ad_total_count: 2,
                  total_urls_count: 76,
                  non_ad_results_count: 9,
                  non_ad_results_urls_count: 9
-               } == parsed_results
+               }
       end
     end
   end
