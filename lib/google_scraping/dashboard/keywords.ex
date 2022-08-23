@@ -121,7 +121,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
         |> Ecto.Changeset.apply_changes()
       end)
       |> Enum.map(&Map.from_struct/1)
-      |> Enum.map(fn params -> Map.drop(params, [:__meta__, :keyword, :user, :id]) end)
+      |> Enum.map(fn params -> Map.take(params, [:url, :is_ad, :keyword_id, :user_id]) end)
       |> Enum.map(fn params -> insert_timestamps(params) end)
 
     # We insert all URLs all together to avoid a lot of queries when new keyword is added.
