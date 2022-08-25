@@ -8,7 +8,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
   alias GoogleScraping.Accounts.Schemas.User
   alias GoogleScraping.Dashboard.KeywordScraperWorker
   alias GoogleScraping.Dashboard.Queries.KeywordQuery
-  alias GoogleScraping.Dashboard.Schemas.Keyword
+  alias GoogleScraping.Dashboard.Schemas.{Keyword, KeywordUrl}
   alias GoogleScraping.Repo
 
   @doc """
@@ -28,6 +28,12 @@ defmodule GoogleScraping.Dashboard.Keywords do
     user_id
     |> KeywordQuery.user_keywords(search_phrase)
     |> Repo.paginate(params)
+  end
+
+  def user_keyword_urls(user_id, is_ad) do
+    user_id
+    |> KeywordQuery.user_keyword_urls(is_ad)
+    |> Repo.all()
   end
 
   @doc """
@@ -103,6 +109,31 @@ defmodule GoogleScraping.Dashboard.Keywords do
     |> Repo.update!()
   end
 
+  def store_keyword_urls(keyword, urls, is_ad) do
+    keyword_urls = build_keyword_urls(keyword, urls, is_ad)
+
+    # We insert all URLs all together to avoid a lot of queries when new keyword is added.
+    Repo.insert_all(KeywordUrl, keyword_urls)
+  end
+
+  def apply_filters_to_user_keywords(user_id, %{url_contains: search_phrase}) do
+    user_id
+    |> KeywordQuery.user_keyword_urls_contains(search_phrase)
+    |> Repo.aggregate(:count)
+  end
+
+  def apply_filters_to_user_keywords(user_id, %{url_exact: search_phrase}) do
+    user_id
+    |> KeywordQuery.user_keyword_urls_exact(search_phrase)
+    |> Repo.aggregate(:count)
+  end
+
+  def apply_filters_to_user_keywords(user_id, %{url_stat: _value}) do
+    user_id
+    |> KeywordQuery.user_keyword_urls_stat()
+    |> Repo.aggregate(:count)
+  end
+
   defp create_keyword_background_job(keyword_id) do
     %{"keyword_id" => keyword_id}
     |> KeywordScraperWorker.new()
@@ -127,5 +158,28 @@ defmodule GoogleScraping.Dashboard.Keywords do
         status: :new
       }
     end)
+  end
+
+  defp insert_timestamps(params) do
+    current_date_time = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
+
+    params
+    |> Map.put(:inserted_at, current_date_time)
+    |> Map.put(:updated_at, current_date_time)
+  end
+
+  defp build_keyword_urls(keyword, urls, is_ad) do
+    urls
+    |> Enum.map(fn url ->
+      %{user_id: keyword.user_id, keyword_id: keyword.id, url: url, is_ad: is_ad}
+    end)
+    |> Enum.map(fn params ->
+      params
+      |> KeywordUrl.changeset()
+      |> Ecto.Changeset.apply_changes()
+    end)
+    |> Enum.map(&Map.from_struct/1)
+    |> Enum.map(fn params -> Map.take(params, [:url, :is_ad, :keyword_id, :user_id]) end)
+    |> Enum.map(fn params -> insert_timestamps(params) end)
   end
 end
