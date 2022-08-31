@@ -155,7 +155,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
     {:ok, result}
   end
 
-  def apply_filters_to_user_keywords(_user_id, _) do
+  def apply_filters_to_user_keywords(_user_id, _filter_params) do
     {:error, "Invalid filter"}
   end
 
