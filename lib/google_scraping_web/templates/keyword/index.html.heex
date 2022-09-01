@@ -45,6 +45,8 @@
     </div>
   <% end %>
 
+  <%= render("_filters_modal", conn: @conn) %>
+
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
@@ -59,12 +61,19 @@
         <%= for {keyword, i} <- Enum.with_index(@keywords, 1) do %>
           <tr>
             <td><%= i %></td>
-            <td><%= keyword.name %></td>
+            <td>
+              <%= link(keyword.name, to: Routes.keyword_path(@conn, :show, keyword)) %>
+            </td>
             <td><%= keyword.status %></td>
             <td><%= Calendar.strftime(keyword.updated_at, "%Y-%m-%d %H:%M") %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
+
+    <%= render(GoogleScrapingWeb.PaginationView, "pagination.html",
+      conn: @conn,
+      pagination: @pagination
+    ) %>
   </div>
 <% end %>

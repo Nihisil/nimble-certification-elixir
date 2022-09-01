@@ -53,12 +53,14 @@ msgid "Keep me logged in for 60 days"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/keyword/index.html.heex:53
+#: lib/google_scraping_web/templates/keyword/index.html.heex:55
 msgid "Keyword"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/index.html.heex:3
+#: lib/google_scraping_web/templates/keyword/show.html.heex:4
+#: lib/google_scraping_web/templates/keyword_filters/index.html.heex:4
 msgid "Keywords"
 msgstr ""
 
@@ -74,12 +76,13 @@ msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/keyword/index.html.heex:54
+#: lib/google_scraping_web/templates/keyword/index.html.heex:56
+#: lib/google_scraping_web/templates/keyword/show.html.heex:20
 msgid "Status"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/templates/keyword/index.html.heex:55
+#: lib/google_scraping_web/templates/keyword/index.html.heex:57
 msgid "Updated"
 msgstr ""
 
@@ -94,7 +97,7 @@ msgid "Log out"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:25
+#: lib/google_scraping_web/controllers/keyword_controller.ex:32
 msgid "Keywords were uploaded!"
 msgstr ""
 
@@ -134,22 +137,22 @@ msgid "CSV file:"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:31
+#: lib/google_scraping_web/controllers/keyword_controller.ex:38
 msgid "The file doesn't look like CSV."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:44
+#: lib/google_scraping_web/controllers/keyword_controller.ex:56
 msgid "The file is empty."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:50
+#: lib/google_scraping_web/controllers/keyword_controller.ex:62
 msgid "The file is too big, allowed size is up to %{limit} keywords."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/keyword_controller.ex:58
+#: lib/google_scraping_web/controllers/keyword_controller.ex:70
 msgid "One or more keywords are invalid! Allowed keyword length is %{min}-%{max}"
 msgstr ""
 
@@ -159,6 +162,9 @@ msgid "Nothing matched the search query '%{query}', you may want to try another 
 msgstr ""
 
 #, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:25
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:37
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:51
 #: lib/google_scraping_web/templates/keyword/index.html.heex:44
 msgid "Search"
 msgstr ""
@@ -176,4 +182,95 @@ msgstr ""
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/index.html.heex:30
 msgid "or visit index page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:59
+msgid "Click to see rendered HTML"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:9
+msgid "Keyword '%{name}' details"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:24
+msgid "Number of AdWords advertisers in the top position"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:36
+msgid "Number of the non-AdWords results on the page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:28
+msgid "The total number of AdWords advertisers on the page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:44
+msgid "The total number of links (all of them) on the page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:32
+msgid "Number of AdWords advertiser's URLs in the top position"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/show.html.heex:40
+msgid "Number of non-AdWords advertiser's URLs"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/pagination/pagination.html.heex:4
+msgid "First"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/pagination/pagination.html.heex:12
+msgid "Last"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword_filters/index.html.heex:19
+msgid "Found %{count} results"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:28
+msgid "How many URLs contain the word in AdWords"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:47
+msgid "How many keywords have URLs in stored search results with 2 or more “/” or 1 or more “>”"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:40
+msgid "How many times a specific URL shows up in stored search results"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:15
+#: lib/google_scraping_web/templates/keyword_filters/index.html.heex:9
+msgid "Keywords filters"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:23
+msgid "Search prase"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:2
+msgid "Show complex filters modal"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+#: lib/google_scraping_web/templates/keyword/_filters_modal.heex:35
+msgid "URL"
 msgstr ""

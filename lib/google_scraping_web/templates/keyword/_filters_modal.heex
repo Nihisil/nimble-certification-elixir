@@ -1,0 +1,57 @@
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#filtersModal">
+  <%= gettext("Show complex filters modal") %>
+</button>
+
+<div
+  class="modal fade"
+  id="filtersModal"
+  tabindex="-1"
+  aria-labelledby="filtersModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filtersModalLabel"><%= gettext("Keywords filters") %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_for @conn, Routes.keyword_filters_path(@conn, :index), [class: "form-inline", method: "get"], fn f-> %>
+          <div class="input-group">
+            <%= text_input(f, :url_contains,
+              class: "form-control mb-0 mr-sm-2",
+              placeholder: gettext("Search prase")
+            ) %>
+            <%= submit(gettext("Search"), class: "btn btn-primary mb-0") %>
+          </div>
+          <div class="form-text mt-0">
+            <%= gettext("How many URLs contain the word in AdWords") %>
+          </div>
+        <% end %>
+        <%= form_for @conn, Routes.keyword_filters_path(@conn, :index), [class: "form-inline", method: "get"], fn f-> %>
+          <div class="input-group mt-3">
+            <%= text_input(f, :url_exact,
+              class: "form-control mb-0 mr-sm-2",
+              placeholder: gettext("URL")
+            ) %>
+            <%= submit(gettext("Search"), class: "btn btn-primary mb-0") %>
+          </div>
+          <div class="form-text mt-0">
+            <%= gettext("How many times a specific URL shows up in stored search results") %>
+          </div>
+        <% end %>
+        <%= form_for @conn, Routes.keyword_filters_path(@conn, :index), [class: "form-inline", method: "get"], fn _f-> %>
+          <div class="input-group mt-3">
+            <input type="hidden" name="url_stat" value="true" />
+            <p class="form-control mb-0">
+              <%= gettext(
+                "How many keywords have URLs in stored search results with 2 or more “/” or 1 or more “>”"
+              ) %>
+            </p>
+            <%= submit(gettext("Search"), class: "btn btn-primary mb-0") %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

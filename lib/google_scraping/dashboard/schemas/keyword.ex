@@ -11,6 +11,13 @@ defmodule GoogleScraping.Dashboard.Schemas.Keyword do
     field :html, :string
     field :status, Ecto.Enum, values: [:new, :in_progress, :completed, :failed]
 
+    field :ad_top_count, :integer
+    field :ad_top_urls_count, :integer
+    field :ad_total_count, :integer
+    field :non_ad_results_count, :integer
+    field :non_ad_results_urls_count, :integer
+    field :total_urls_count, :integer
+
     belongs_to :user, GoogleScraping.Accounts.Schemas.User
 
     timestamps()

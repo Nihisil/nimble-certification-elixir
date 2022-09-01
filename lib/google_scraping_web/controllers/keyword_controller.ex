@@ -6,9 +6,16 @@ defmodule GoogleScrapingWeb.KeywordController do
 
   def index(conn, params) do
     changeset = KeywordCSVFile.create_changeset(%KeywordCSVFile{})
-    keywords = Keywords.list_keywords(conn.assigns.current_user.id, params)
 
-    render(conn, "index.html", keywords: keywords, changeset: changeset, params: params)
+    {keywords, pagination} =
+      Keywords.list_paginated_user_keywords(conn.assigns.current_user.id, params)
+
+    render(conn, "index.html",
+      keywords: keywords,
+      changeset: changeset,
+      params: params,
+      pagination: pagination
+    )
   end
 
   def create(conn, %{"keyword_csv_file" => params}) do
@@ -26,7 +33,7 @@ defmodule GoogleScrapingWeb.KeywordController do
       |> redirect(to: Routes.keyword_path(conn, :index))
     else
       %Ecto.Changeset{valid?: false} ->
-        show_error_flash_message_and_redirects_to_dasboard(
+        show_error_flash_message_and_redirects_to_dashboard(
           conn,
           gettext("The file doesn't look like CSV.")
         )
@@ -36,16 +43,21 @@ defmodule GoogleScrapingWeb.KeywordController do
     end
   end
 
+  def show(conn, %{"id" => keyword_id}) do
+    keyword = Keywords.get_user_keyword_by_id!(conn.assigns.current_user, keyword_id)
+    render(conn, "show.html", keyword: keyword)
+  end
+
   defp process_validation_error(conn, reason) do
     case reason do
       :empty_file_error ->
-        show_error_flash_message_and_redirects_to_dasboard(
+        show_error_flash_message_and_redirects_to_dashboard(
           conn,
           gettext("The file is empty.")
         )
 
       :file_is_too_long_error ->
-        show_error_flash_message_and_redirects_to_dasboard(
+        show_error_flash_message_and_redirects_to_dashboard(
           conn,
           gettext("The file is too big, allowed size is up to %{limit} keywords.",
             limit: KeywordCSVFile.keywords_limit()
@@ -53,7 +65,7 @@ defmodule GoogleScrapingWeb.KeywordController do
         )
 
       :one_or_more_keywords_are_invalid ->
-        show_error_flash_message_and_redirects_to_dasboard(
+        show_error_flash_message_and_redirects_to_dashboard(
           conn,
           gettext("One or more keywords are invalid! Allowed keyword length is %{min}-%{max}",
             min: Keyword.min_length(),
@@ -63,7 +75,7 @@ defmodule GoogleScrapingWeb.KeywordController do
     end
   end
 
-  defp show_error_flash_message_and_redirects_to_dasboard(conn, flash_message) do
+  defp show_error_flash_message_and_redirects_to_dashboard(conn, flash_message) do
     conn
     |> put_flash(:error, flash_message)
     |> redirect(to: Routes.keyword_path(conn, :index))
