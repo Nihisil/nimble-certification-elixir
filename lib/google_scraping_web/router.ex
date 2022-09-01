@@ -77,5 +77,6 @@ defmodule GoogleScrapingWeb.Router do
 
     delete "/users/log_out", UserSessionController, :delete
     resources "/keywords", KeywordController, only: [:index, :create, :show]
+    resources "/keyword/filters", KeywordFiltersController, only: [:index]
   end
 end

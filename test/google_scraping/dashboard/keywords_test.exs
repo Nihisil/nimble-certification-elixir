@@ -39,9 +39,12 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
       _non_ad_url =
         insert(:keyword_url, user_id: user.id, url: "https://test.com/technology", is_ad: false)
 
-      assert Keywords.apply_filters_to_user_keywords(user.id, %{
-               url_contains: "tech"
-             }) == 2
+      {:ok, result} =
+        assert Keywords.apply_filters_to_user_keywords(user.id, %{
+                 "url_contains" => "tech"
+               })
+
+      assert result == 2
     end
 
     test "with provided url_exact filter, returns count of urls" do
@@ -54,9 +57,12 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
       _non_ad_url =
         insert(:keyword_url, user_id: user.id, url: "https://test.com/abc", is_ad: false)
 
-      assert Keywords.apply_filters_to_user_keywords(user.id, %{
-               url_exact: "https://test.com/abc"
-             }) == 2
+      {:ok, result} =
+        Keywords.apply_filters_to_user_keywords(user.id, %{
+          "url_exact" => "https://test.com/abc"
+        })
+
+      assert result == 2
     end
 
     test "with provided url_stat filter, returns count of urls" do
@@ -68,9 +74,12 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
       _non_ad_url =
         insert(:keyword_url, user_id: user.id, url: "https://test.com/abc", is_ad: false)
 
-      assert Keywords.apply_filters_to_user_keywords(user.id, %{
-               url_stat: true
-             }) == 2
+      {:ok, result} =
+        Keywords.apply_filters_to_user_keywords(user.id, %{
+          "url_stat" => true
+        })
+
+      assert result == 2
     end
   end
 

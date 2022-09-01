@@ -1,0 +1,22 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <%= link(gettext("Keywords"),
+        to: Routes.keyword_path(@conn, :index)
+      ) %>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      <%= gettext("Keywords filters") %>
+    </li>
+  </ol>
+
+  <%= if @error do %>
+    <div class="alert alert-danger" role="alert">
+      <%= @error %>
+    </div>
+  <% else %>
+    <div class="alert alert-success" role="alert">
+      <%= gettext("Found %{count} results", count: @count_results) %>
+    </div>
+  <% end %>
+</nav>

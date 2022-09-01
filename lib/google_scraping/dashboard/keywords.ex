@@ -116,22 +116,35 @@ defmodule GoogleScraping.Dashboard.Keywords do
     Repo.insert_all(KeywordUrl, keyword_urls)
   end
 
-  def apply_filters_to_user_keywords(user_id, %{url_contains: search_phrase}) do
-    user_id
-    |> KeywordQuery.user_keyword_urls_contains(search_phrase)
-    |> Repo.aggregate(:count)
+  def apply_filters_to_user_keywords(user_id, %{"url_contains" => search_phrase}) do
+    result =
+      user_id
+      |> KeywordQuery.user_keyword_urls_contains(search_phrase)
+      |> Repo.aggregate(:count)
+
+    {:ok, result}
   end
 
-  def apply_filters_to_user_keywords(user_id, %{url_exact: search_phrase}) do
-    user_id
-    |> KeywordQuery.user_keyword_urls_exact(search_phrase)
-    |> Repo.aggregate(:count)
+  def apply_filters_to_user_keywords(user_id, %{"url_exact" => search_phrase}) do
+    result =
+      user_id
+      |> KeywordQuery.user_keyword_urls_exact(search_phrase)
+      |> Repo.aggregate(:count)
+
+    {:ok, result}
   end
 
-  def apply_filters_to_user_keywords(user_id, %{url_stat: _value}) do
-    user_id
-    |> KeywordQuery.user_keyword_urls_stat()
-    |> Repo.aggregate(:count)
+  def apply_filters_to_user_keywords(user_id, %{"url_stat" => _value}) do
+    result =
+      user_id
+      |> KeywordQuery.user_keyword_urls_stat()
+      |> Repo.aggregate(:count)
+
+    {:ok, result}
+  end
+
+  def apply_filters_to_user_keywords(_user_id, _filter_params) do
+    {:error, "Invalid filter"}
   end
 
   defp create_keyword_background_job(keyword_id) do
