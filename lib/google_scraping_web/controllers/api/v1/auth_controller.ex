@@ -21,4 +21,11 @@ defmodule GoogleScrapingWeb.Api.V1.AuthController do
       |> render("auth_required.json", message: "Incorrect email or password")
     end
   end
+
+  def create(conn, _params) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(ErrorView)
+    |> render("unprocessable_entity.json", message: "Invalid input attributes")
+  end
 end

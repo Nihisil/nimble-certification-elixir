@@ -45,5 +45,21 @@ defmodule GoogleScrapingWeb.Api.V1.AuthControllerTest do
                ]
              }
     end
+
+    test "given not correct input attributes, returns error response", %{conn: conn} do
+      conn =
+        post(conn, Routes.api_auth_path(conn, :create), %{
+          not_valid: "not_valid"
+        })
+
+      assert json_response(conn, 422) == %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "message" => "Invalid input attributes"
+                 }
+               ]
+             }
+    end
   end
 end

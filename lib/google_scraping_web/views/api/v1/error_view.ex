@@ -9,4 +9,15 @@ defmodule GoogleScrapingWeb.Api.V1.ErrorView do
       ]
     }
   end
+
+  def render("unprocessable_entity.json", %{message: message}) do
+    %{
+      errors: [
+        %{
+          code: "unprocessable_entity",
+          message: message
+        }
+      ]
+    }
+  end
 end
