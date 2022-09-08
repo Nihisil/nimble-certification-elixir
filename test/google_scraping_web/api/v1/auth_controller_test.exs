@@ -36,14 +36,14 @@ defmodule GoogleScrapingWeb.Api.V1.AuthControllerTest do
           password: "invalid_password"
         })
 
-      assert %{
+      assert json_response(conn, 401) == %{
                "errors" => [
                  %{
                    "code" => "unauthorized",
                    "message" => "Incorrect email or password"
                  }
                ]
-             } = json_response(conn, 401)
+             }
     end
   end
 end
