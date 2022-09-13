@@ -18,4 +18,11 @@ defmodule GoogleScrapingWeb.Api.V1.AuthController do
       ErrorHandler.render_error_json(conn, :bad_request, "Incorrect email or password")
     end
   end
+
+  def create(conn, _params) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(ErrorView)
+    |> render("unprocessable_entity.json", message: "Invalid input attributes")
+  end
 end

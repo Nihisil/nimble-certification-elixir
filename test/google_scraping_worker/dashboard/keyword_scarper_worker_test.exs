@@ -15,7 +15,7 @@ defmodule GoogleScraping.Dashboard.KeywordScraperWorkerTest do
         assert updated_keyword.ad_top_count == 1
         assert updated_keyword.ad_top_urls_count == 6
         assert updated_keyword.ad_total_count == 2
-        assert updated_keyword.total_urls_count == 84
+        assert updated_keyword.total_urls_count == 76
         assert updated_keyword.non_ad_results_count == 9
         assert updated_keyword.non_ad_results_urls_count == 9
         assert is_binary(updated_keyword.html)

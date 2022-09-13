@@ -1,12 +1,12 @@
 defmodule GoogleScraping.Dashboard.KeywordParser do
   @selectors %{
     ad_top_count: "#tads .uEierd",
-    ad_top_urls_count: "#tads .uEierd a",
+    ad_top_urls_count: "#tads .uEierd a[href]",
     ad_total_count: ".x2VHCd.OSrXXb.qzEoUe",
-    ad_total_urls: ".uEierd a",
+    ad_total_urls: ".uEierd a[href]",
     non_ad_results_count: ".yuRUbf",
-    non_ad_results_urls: ".yuRUbf a",
-    all_urls: "a"
+    non_ad_results_urls: ".yuRUbf a[href]",
+    all_urls: "a[href]"
   }
 
   def parse(html) do
