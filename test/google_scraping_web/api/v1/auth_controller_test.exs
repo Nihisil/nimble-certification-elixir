@@ -46,7 +46,6 @@ defmodule GoogleScrapingWeb.Api.V1.AuthControllerTest do
              }
     end
 
-    @tag :wip
     test "given not correct input attributes, returns error response", %{conn: conn} do
       conn =
         post(conn, Routes.api_auth_path(conn, :create), %{
