@@ -146,13 +146,13 @@ msgid "The file is empty."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:51
+#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:59
 #: lib/google_scraping_web/controllers/keyword_controller.ex:62
 msgid "The file is too big, allowed size is up to %{limit} keywords"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:61
+#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:69
 #: lib/google_scraping_web/controllers/keyword_controller.ex:70
 msgid "One or more keywords are invalid! Allowed keyword length is %{min}-%{max}"
 msgstr ""
@@ -277,6 +277,6 @@ msgid "URL"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:44
+#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:52
 msgid "The file is empty"
 msgstr ""

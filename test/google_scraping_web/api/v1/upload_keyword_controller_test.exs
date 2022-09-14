@@ -11,7 +11,7 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
           conn
           |> token_auth_user(user)
           |> post(Routes.api_upload_keyword_path(conn, :create), %{
-            keyword_csv_file: %{file: upload_file}
+            keyword_csv_file: upload_file
           })
 
         assert %{
@@ -37,7 +37,7 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
       conn
       |> token_auth_user(user)
       |> post(Routes.api_upload_keyword_path(conn, :create), %{
-        keyword_csv_file: %{file: upload_file}
+        keyword_csv_file: upload_file
       })
 
     assert %{"errors" => [%{"detail" => "The file is empty", "status" => "bad_request"}]} ==
@@ -52,7 +52,7 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
       conn
       |> token_auth_user(user)
       |> post(Routes.api_upload_keyword_path(conn, :create), %{
-        keyword_csv_file: %{file: upload_file}
+        keyword_csv_file: upload_file
       })
 
     assert %{
@@ -74,7 +74,7 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
       conn
       |> token_auth_user(user)
       |> post(Routes.api_upload_keyword_path(conn, :create), %{
-        keyword_csv_file: %{file: upload_file}
+        keyword_csv_file: upload_file
       })
 
     assert %{
@@ -95,10 +95,29 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
       conn
       |> token_auth_user(user)
       |> post(Routes.api_upload_keyword_path(conn, :create), %{
-        keyword_csv_file: %{file: nil}
+        keyword_csv_file: nil
       })
 
     assert %{"errors" => [%{"detail" => "file can't be blank", "status" => "bad_request"}]} ==
              json_response(conn, 400)
+  end
+
+  test "given a no file attribute, returns 422 status with error details", %{conn: conn} do
+    user = insert(:user)
+
+    conn =
+      conn
+      |> token_auth_user(user)
+      |> post(Routes.api_upload_keyword_path(conn, :create), %{})
+
+    assert %{
+             "errors" => [
+               %{
+                 "detail" => "Invalid input attributes. Add `keyword_csv_file` to request body",
+                 "status" => "unprocessable_entity"
+               }
+             ]
+           } ==
+             json_response(conn, 422)
   end
 end

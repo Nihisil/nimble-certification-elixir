@@ -7,7 +7,7 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordController do
 
   def create(conn, %{"keyword_csv_file" => params}) do
     changeset = %{
-      KeywordCSVFile.create_changeset(%KeywordCSVFile{}, params)
+      KeywordCSVFile.create_changeset(%KeywordCSVFile{}, %{file: params})
       | action: :validate
     }
 
@@ -34,6 +34,14 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordController do
       {:error, reason} ->
         process_validation_error(conn, reason)
     end
+  end
+
+  def create(conn, _params) do
+    ErrorHandler.render_error_json(
+      conn,
+      :unprocessable_entity,
+      "Invalid input attributes. Add `keyword_csv_file` to request body"
+    )
   end
 
   defp process_validation_error(conn, reason) do
