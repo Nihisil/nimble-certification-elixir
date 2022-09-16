@@ -147,13 +147,13 @@ msgid "The file is empty."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:51
+#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:55
 #: lib/google_scraping_web/controllers/keyword_controller.ex:62
 msgid "The file is too big, allowed size is up to %{limit} keywords"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:61
+#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:63
 #: lib/google_scraping_web/controllers/keyword_controller.ex:70
 msgid "One or more keywords are invalid! Allowed keyword length is %{min}-%{max}"
 msgstr ""
@@ -218,12 +218,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/show.html.heex:32
-msgid "URLs of the AdWords advertisers in the top position"
+msgid "Number of AdWords advertiser's URLs in the top position"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 #: lib/google_scraping_web/templates/keyword/show.html.heex:40
-msgid "URLs of the non-AdWords results on the page"
+msgid "Number of non-AdWords advertiser's URLs"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -278,6 +278,6 @@ msgid "URL"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:44
+#: lib/google_scraping_web/controllers/api/v1/upload_keyword_controller.ex:50
 msgid "The file is empty"
 msgstr ""

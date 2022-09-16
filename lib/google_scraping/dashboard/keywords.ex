@@ -74,7 +74,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
     end)
   end
 
-  def get_user_keyword_by_id!(%User{id: user_id} = _user, keyword_id),
+  def get_user_keyword_by_id!(%User{id: user_id}, keyword_id),
     do: Repo.get_by!(Keyword, id: keyword_id, user_id: user_id)
 
   @doc """
@@ -110,19 +110,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
   end
 
   def store_keyword_urls(keyword, urls, is_ad) do
-    keyword_urls =
-      urls
-      |> Enum.map(fn url ->
-        %{user_id: keyword.user_id, keyword_id: keyword.id, url: url, is_ad: is_ad}
-      end)
-      |> Enum.map(fn params ->
-        params
-        |> KeywordUrl.changeset()
-        |> Ecto.Changeset.apply_changes()
-      end)
-      |> Enum.map(&Map.from_struct/1)
-      |> Enum.map(fn params -> Map.drop(params, [:__meta__, :keyword, :user, :id]) end)
-      |> Enum.map(fn params -> insert_timestamps(params) end)
+    keyword_urls = build_keyword_urls(keyword, urls, is_ad)
 
     # We insert all URLs all together to avoid a lot of queries when new keyword is added.
     Repo.insert_all(KeywordUrl, keyword_urls)
@@ -155,7 +143,7 @@ defmodule GoogleScraping.Dashboard.Keywords do
     {:ok, result}
   end
 
-  def apply_filters_to_user_keywords(_user_id, _) do
+  def apply_filters_to_user_keywords(_user_id, _filter_params) do
     {:error, "Invalid filter"}
   end
 
@@ -191,5 +179,20 @@ defmodule GoogleScraping.Dashboard.Keywords do
     params
     |> Map.put(:inserted_at, current_date_time)
     |> Map.put(:updated_at, current_date_time)
+  end
+
+  defp build_keyword_urls(keyword, urls, is_ad) do
+    urls
+    |> Enum.map(fn url ->
+      %{user_id: keyword.user_id, keyword_id: keyword.id, url: url, is_ad: is_ad}
+    end)
+    |> Enum.map(fn params ->
+      params
+      |> KeywordUrl.changeset()
+      |> Ecto.Changeset.apply_changes()
+    end)
+    |> Enum.map(&Map.from_struct/1)
+    |> Enum.map(fn params -> Map.take(params, [:url, :is_ad, :keyword_id, :user_id]) end)
+    |> Enum.map(fn params -> insert_timestamps(params) end)
   end
 end

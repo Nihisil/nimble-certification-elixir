@@ -15,7 +15,11 @@ defmodule GoogleScrapingWeb.Api.V1.AuthController do
         data: %{id: :os.system_time(:millisecond), token: token, email: user.email}
       })
     else
-      ErrorHandler.render_error_json(conn, :bad_request, "Incorrect email or password")
+      ErrorHandler.render_error_json(conn, :unauthorized, "Incorrect email or password")
     end
+  end
+
+  def create(conn, _params) do
+    ErrorHandler.render_error_json(conn, :unprocessable_entity, "Invalid input attributes")
   end
 end

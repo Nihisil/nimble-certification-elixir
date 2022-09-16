@@ -27,7 +27,7 @@ defmodule GoogleScraping.Dashboard.Queries.KeywordQuery do
   end
 
   @doc """
-  How many times a specific %URL% shows up in stored search results.
+  How many times a specific URL shows up in stored search results.
   """
   def user_keyword_urls_exact(user_id, exact_url) do
     KeywordUrl

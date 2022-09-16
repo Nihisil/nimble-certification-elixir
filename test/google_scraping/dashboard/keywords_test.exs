@@ -27,7 +27,7 @@ defmodule GoogleScraping.Dashboard.KeywordsTest do
   end
 
   describe "apply_filters_to_user_keywords/2" do
-    test "with provided url_contains filter, returns count of urls" do
+    test "given provided url_contains filter, returns count of urls" do
       user = insert(:user)
 
       _ad_url =
