@@ -28,8 +28,8 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordController do
         changeset_errors = ErrorHandler.build_changeset_error_message(changeset)
 
         conn
-        |> put_status(:bad_request)
-        |> ErrorHandler.render_error_json(:bad_request, changeset_errors)
+        |> put_status(:unprocessable_entity)
+        |> ErrorHandler.render_error_json(:unprocessable_entity, changeset_errors)
 
       {:error, reason} ->
         process_validation_error(conn, reason)
@@ -70,7 +70,7 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordController do
 
   defp build_error_response(conn, message) do
     conn
-    |> put_status(:bad_request)
-    |> ErrorHandler.render_error_json(:bad_request, message)
+    |> put_status(:unprocessable_entity)
+    |> ErrorHandler.render_error_json(:unprocessable_entity, message)
   end
 end

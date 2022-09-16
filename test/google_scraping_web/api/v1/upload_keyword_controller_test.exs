@@ -29,7 +29,7 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
     end
   end
 
-  test "given an empty file, returns 400 status with error details", %{conn: conn} do
+  test "given an empty file, returns 422 status with error details", %{conn: conn} do
     user = insert(:user)
     upload_file = keyword_file_fixture("empty.csv")
 
@@ -40,11 +40,11 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
         keyword_csv_file: upload_file
       })
 
-    assert %{"errors" => [%{"detail" => "The file is empty", "status" => "bad_request"}]} ==
-             json_response(conn, 400)
+    assert %{"errors" => [%{"detail" => "The file is empty", "status" => "unprocessable_entity"}]} ==
+             json_response(conn, 422)
   end
 
-  test "given a big file, returns 400 status with error details", %{conn: conn} do
+  test "given a big file, returns 422 status with error details", %{conn: conn} do
     user = insert(:user)
     upload_file = keyword_file_fixture("big.csv")
 
@@ -59,14 +59,14 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
              "errors" => [
                %{
                  "detail" => "The file is too big, allowed size is up to 1000 keywords",
-                 "status" => "bad_request"
+                 "status" => "unprocessable_entity"
                }
              ]
            } ==
-             json_response(conn, 400)
+             json_response(conn, 422)
   end
 
-  test "given a non valid file, returns 400 status with error details", %{conn: conn} do
+  test "given a NON valid file, returns 422 status with error details", %{conn: conn} do
     user = insert(:user)
     upload_file = keyword_file_fixture("non_valid.csv")
 
@@ -81,14 +81,14 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
              "errors" => [
                %{
                  "detail" => "One or more keywords are invalid! Allowed keyword length is 1-100",
-                 "status" => "bad_request"
+                 "status" => "unprocessable_entity"
                }
              ]
            } ==
-             json_response(conn, 400)
+             json_response(conn, 422)
   end
 
-  test "given a no file, returns 400 status with error details", %{conn: conn} do
+  test "given a no file, returns 422 status with error details", %{conn: conn} do
     user = insert(:user)
 
     conn =
@@ -98,8 +98,8 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordControllerTest do
         keyword_csv_file: nil
       })
 
-    assert %{"errors" => [%{"detail" => "file can't be blank", "status" => "bad_request"}]} ==
-             json_response(conn, 400)
+    assert %{"errors" => [%{"detail" => "file can't be blank", "status" => "unprocessable_entity"}]} ==
+             json_response(conn, 422)
   end
 
   test "given a no file attribute, returns 422 status with error details", %{conn: conn} do
