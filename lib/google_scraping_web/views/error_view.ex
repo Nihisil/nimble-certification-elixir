@@ -1,11 +1,16 @@
 defmodule GoogleScrapingWeb.ErrorView do
   use GoogleScrapingWeb, :view
 
-  # If you want to customize a particular status code
-  # for a certain format, you may uncomment below.
-  # def render("500.html", _assigns) do
-  #   "Internal Server Error"
-  # end
+  def render("error.json", %{status: status, message: message}) do
+    %{
+      errors: [
+        %{
+          status: status,
+          detail: message
+        }
+      ]
+    }
+  end
 
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes

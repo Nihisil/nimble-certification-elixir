@@ -39,8 +39,8 @@ defmodule GoogleScrapingWeb.Api.V1.AuthControllerTest do
       assert json_response(conn, 401) == %{
                "errors" => [
                  %{
-                   "code" => "unauthorized",
-                   "message" => "Incorrect email or password"
+                   "status" => "unauthorized",
+                   "detail" => "Incorrect email or password"
                  }
                ]
              }
@@ -55,8 +55,8 @@ defmodule GoogleScrapingWeb.Api.V1.AuthControllerTest do
       assert json_response(conn, 422) == %{
                "errors" => [
                  %{
-                   "code" => "unprocessable_entity",
-                   "message" => "Invalid input attributes"
+                   "detail" => "Invalid input attributes",
+                   "status" => "unprocessable_entity"
                  }
                ]
              }
