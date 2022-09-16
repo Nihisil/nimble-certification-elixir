@@ -31,9 +31,6 @@ defmodule GoogleScrapingWeb.Controllers.ErrorHandler do
         end)
       end)
 
-    error_message =
-      Enum.map_join(errors, "\n", fn {key, errors} -> "#{key} #{Enum.join(errors, ", ")}" end)
-
-    error_message
+    Enum.map_join(errors, "\n", fn {key, errors} -> "#{key} #{Enum.join(errors, ", ")}" end)
   end
 end
