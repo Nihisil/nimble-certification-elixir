@@ -47,30 +47,30 @@ defmodule GoogleScrapingWeb.Api.V1.UploadKeywordController do
   defp process_validation_error(conn, reason) do
     case reason do
       :empty_file_error ->
-        conn
-        |> put_status(:bad_request)
-        |> ErrorHandler.render_error_json(:bad_request, gettext("The file is empty"))
+        build_error_response(conn, gettext("The file is empty"))
 
       :file_is_too_long_error ->
-        conn
-        |> put_status(:bad_request)
-        |> ErrorHandler.render_error_json(
-          :bad_request,
+        build_error_response(
+          conn,
           gettext("The file is too big, allowed size is up to %{limit} keywords",
             limit: KeywordCSVFile.keywords_limit()
           )
         )
 
       :one_or_more_keywords_are_invalid ->
-        conn
-        |> put_status(:bad_request)
-        |> ErrorHandler.render_error_json(
-          :bad_request,
+        build_error_response(
+          conn,
           gettext("One or more keywords are invalid! Allowed keyword length is %{min}-%{max}",
             min: Keyword.min_length(),
             max: Keyword.max_length()
           )
         )
     end
+  end
+
+  defp build_error_response(conn, message) do
+    conn
+    |> put_status(:bad_request)
+    |> ErrorHandler.render_error_json(:bad_request, message)
   end
 end
