@@ -2,7 +2,7 @@ defmodule GoogleScrapingWeb.Api.V1.KeywordFilterControllerTest do
   use GoogleScrapingWeb.ConnCase
 
   describe "get index/2" do
-    test "with provided url_contains filter, returns count of urls", %{conn: conn} do
+    test "with provided url_contains filter, returns count of ad-word urls", %{conn: conn} do
       user = insert(:user)
 
       _ad_url =
