@@ -18,6 +18,17 @@ defmodule GoogleScrapingWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :token_auth do
+    plug Guardian.Plug.Pipeline,
+      module: GoogleScraping.Account.Guardian,
+      error_handler: GoogleScrapingWeb.Controllers.ErrorHandler
+
+    plug Guardian.Plug.VerifyHeader, scheme: "Bearer"
+    plug Guardian.Plug.EnsureAuthenticated
+    plug Guardian.Plug.LoadResource
+    plug GoogleScrapingWeb.Plugs.SetCurrentUser
+  end
+
   # coveralls-ignore-stop
 
   forward Application.get_env(:google_scraping, GoogleScrapingWeb.Endpoint)[:health_path],
@@ -78,5 +89,24 @@ defmodule GoogleScrapingWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
     resources "/keywords", KeywordController, only: [:index, :create, :show]
     resources "/keyword/filters", KeywordFiltersController, only: [:index]
+  end
+
+  scope "/api/v1", GoogleScrapingWeb.Api.V1, as: :api do
+    pipe_through [
+      :api
+    ]
+
+    post "/sign-in", AuthController, :create
+  end
+
+  scope "/api/v1", GoogleScrapingWeb.Api.V1, as: :api do
+    pipe_through [
+      :api,
+      :token_auth
+    ]
+
+    get "/keywords", KeywordController, :index
+    post "/keywords/upload-file", UploadKeywordController, :create
+    get "/keywords/filter", KeywordFilterController, :index
   end
 end

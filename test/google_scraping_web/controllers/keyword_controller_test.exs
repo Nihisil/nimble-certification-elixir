@@ -54,7 +54,7 @@ defmodule GoogleScrapingWeb.KeywordControllerTest do
         |> post(Routes.keyword_path(conn, :create), %{keyword_csv_file: %{file: upload_file}})
 
       assert get_flash(conn, :info) == nil
-      assert get_flash(conn, :error) == "The file is too big, allowed size is up to 1000 keywords."
+      assert get_flash(conn, :error) == "The file is too big, allowed size is up to 1000 keywords"
     end
 
     test "given non CSV file, shows validation error", %{conn: conn} do

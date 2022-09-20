@@ -18,10 +18,14 @@ config :google_scraping, GoogleScraping.Repo,
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
+secret_key = "6PUReG63ZBk9DNTxNWs8zJtbbku4LVtGl0xrdqqQuVFN+B7vAtx5Yxsng2wkQ5NR"
+
 config :google_scraping, GoogleScrapingWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "6PUReG63ZBk9DNTxNWs8zJtbbku4LVtGl0xrdqqQuVFN+B7vAtx5Yxsng2wkQ5NR",
+  secret_key_base: secret_key,
   server: true
+
+config :google_scraping, GoogleScraping.Account.Guardian, secret_key: secret_key
 
 config :google_scraping, :sql_sandbox, true
 

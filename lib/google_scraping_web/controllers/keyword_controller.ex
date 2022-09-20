@@ -59,7 +59,7 @@ defmodule GoogleScrapingWeb.KeywordController do
       :file_is_too_long_error ->
         show_error_flash_message_and_redirects_to_dashboard(
           conn,
-          gettext("The file is too big, allowed size is up to %{limit} keywords.",
+          gettext("The file is too big, allowed size is up to %{limit} keywords",
             limit: KeywordCSVFile.keywords_limit()
           )
         )
