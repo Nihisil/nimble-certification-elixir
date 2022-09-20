@@ -107,5 +107,6 @@ defmodule GoogleScrapingWeb.Router do
 
     get "/keywords", KeywordController, :index
     post "/keywords/upload-file", UploadKeywordController, :create
+    get "/keywords/filter", KeywordFilterController, :index
   end
 end
